@@ -229,14 +229,37 @@ Go to Builds.
 
 image::eap8-builds.png[migration,80%]
 
-Select eap8-build-artifacts.
+Select `eap8-build-artifacts`.
 
 Choose the Builds tab.
 
-Click on eap8-build-artifacts-1 to view the logs of the active build.
+Click on `eap8-build-artifacts-1` to view the logs of the active build.
 
 Once the builds are complete, you will be able to click the Open URL icon of the eap8 deployment to view the running application.
 
-image::eap8-ocp.png[migration,80%]
+image::eap8-on-ocp.png[eap8-on-ocp,80%]
+
+== Testing the deployment
+
+The application we've deployed can be tested using curl from the terminal in OpenShift Dev Spaces
+
+NOTE: Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Terminal"
+
+image::open-terminal.png[open-terminal,80%]
+
+From the terminal, enter the following command to test the deployment:
+
+[source,bash,role="copypaste"]
+----
+curl -X POST http://eap8.{USER_ID}-project.svc.cluster.local:8080/subscribers -H 'Content-Type: application/json' -d '{"id": 0}'
+----
+
+You should see a response similar to:
+
+[source,bash]
+----
+{"subscriptions":{"packages":[{"amount":16,"id":"i-001"},{"amount":32,"id":"i-002"},{"amount":200,"id":"i-018"}],"period":{"end":"01-01-2024","start":"01-01-2023"}}}
+
+----
 
 We've now completed the migration of our JBoss EAP 8.0 application to OpenShift.

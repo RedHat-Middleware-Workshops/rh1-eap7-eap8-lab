@@ -9,6 +9,6 @@
 In this workshop you will be guided through the following exercises
 
 * Perform code analysis with the Migration Toolkit for Runtimes to itentify code changes required to migrate from JBoss EAP 7.4 to {EAP8_VERSION}.
-* Use the code analysis report to implement the required code changes to migrate from JBoss EAP 7.4 to {EAP8_VERSION}.
+* Use the code analysis report to implement the required code changes to migrate from JBoss EAP 7.4 to JBoss EAP 8.0.
 * Setup the services required by the application on OpenShift.
-* Build and deploy the {EAP8_VERSION} application on OpenShift.
+* Build and deploy the JBoss EAP 8.0 application on OpenShift.
