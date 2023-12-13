@@ -1,31 +1,14 @@
-= From Development to Deployment: Securing The Software Supply Chain with Red Hat OpenShift
+= Migrating from JBoss EAP 7.4 to JBoss EAP 8.0 on OpenShift
 :toc:
 :toc-placement: preamble
 :sectnums:
 :icons: font
 
-== Introduction and Challenge Overview
+== Agenda
 
-*Recap of the current security challenges with similar-looking malicious container images.*
-*Overview of how these challenges led us to embrace Cosign and Tekton Chains.*
+In this workshop you will be guided through the following exercises
 
-== Deep Dive into Cosign and Sigstore
-
-*Exploration of Cosign as part of the Sigstore project, focusing on its role in securing container images through cryptographic signing.*
-
-== Understanding Tekton Chains in OpenShift Pipelines
-
-*Detailed analysis of how Tekton Chains, as a Kubernetes CRD controller, enhances the supply chain security in our Red Hat OpenShift Pipelines.*
-*Discussion on the automatic signing of task runs, the use of advanced attestation formats like in-toto, and the importance of secure storage for artifacts.*
-
-== Advanced Cluster Security (ACS) and Cosign Integration
-
-*Insight into how ACS's integration with Cosign provides additional layers of security and verification for container images in OpenShift.*
-
-== Hands-On Session: Implementing Cosign and Tekton Chains
-
-*Participants will learn to set up Cosign for signing container images and see how Tekton Chains can automate these signatures within OpenShift Pipelines.*
-
-== Challenge Lab
-
-*A practical, scenario-based exercise focusing on applying these concepts in real-world-like simulations, emphasizing problem-solving in image verification and efficient resource provisioning within OpenShift deployments.*
+* Perform code analysis with the Migration Toolkit for Runtimes to itentify code changes required to migrate from JBoss EAP 7.4 to {EAP8_VERSION}.
+* Use the code analysis report to implement the required code changes to migrate from JBoss EAP 7.4 to {EAP8_VERSION}.
+* Setup the services required by the application on OpenShift.
+* Build and deploy the {EAP8_VERSION} application on OpenShift.

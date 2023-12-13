@@ -1,0 +1,242 @@
+== Deploying the JBoss EAP 8.0 application to OpenShift
+
+JBoss EAP 8.0 introduced changes to the provisioning and configuration of JBoss EAP application images on Red Hat OpenShift. The process adopted the JBoss EAP Maven plugin, which provides significant improvements that make configuring JBoss EAP on OpenShift easier and more flexible.
+
+When building a JBoss EAP 7.x image for OpenShift, the OpenShift builder image provisioned the JBoss EAP server instance. The configuration was provided by a combination of runtime variables, configuration snippets, and JBoss CLI scripts.
+
+With JBoss EAP 8.0 , the JBoss EAP Maven plugin provisions the server and deploys the packaged application during the Maven execution. All the configuration for this build process is maintained in the Maven pom.xml file. This allows developers and operations teams to control and test their EAP deployments in their local environments, which provides significant benefits.
+
+The JBoss EAP Maven plugin uses https://github.com/wildfly/galleon#overview[Galleon^] to provision a JBoss EAP server configured with the minimum set of features to support the deployed application. Galleon is a provisioning tool for working with Maven repositories. Galleon automatically retrieves released JBoss EAP Maven artifacts to compose a software distribution of a JBoss EAP-based application server according to a user's configuration.
+
+To build and deploy this application on OpenShift, the only change we need to make is to the Maven pom.xml file. This involves adding the eap-maven-plugin, which takes care of all the provisioning and configuration required to build an instance of JBoss EAP 8.0 to run our application.
+
+First step is to add the Red Hat plugin repositories for GA and early access software. Open the file `app/pom.xml` and add this after the repositories tag.
+
+[source,xml,role="copypaste"]
+----
+   <pluginRepositories>
+        <!-- keep this repository the first -->
+        <pluginRepository>
+            <id>jboss-public-maven-repository</id>
+            <name>JBoss Public Maven Repository</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>redhat-ga-maven-repository</id>
+            <name>Red Hat GA Maven Repository</name>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>redhat-ea-maven-repository</id>
+            <name>Red Hat Early Access Maven Repository</name>
+            <url>https://maven.repository.redhat.com/earlyaccess/all/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+----
+
+Also in the pom.xml file and add the following before the closing tag replacing the existing <profiles> block:
+
+[source,xml,role="copypaste"]
+----
+<profiles>
+    <profile>
+        <id>openshift</id>
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.3.2</version>
+                    <configuration>
+                        <warName>ROOT</warName>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                        </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.jboss.eap.plugins</groupId>
+                    <artifactId>eap-maven-plugin</artifactId>
+                    <version>1.0.0.Beta6-redhat-00001</version>
+                    <configuration>
+                        <channels>
+                            <channel>
+                                <groupId>org.jboss.eap.channels</groupId>
+                                <artifactId>eap-8.0-beta</artifactId>
+                            </channel>
+                        </channels>
+                        <feature-packs>
+                            <feature-pack>
+                                <location>org.jboss.eap:wildfly-ee-galleon-pack</location>
+                            </feature-pack>
+                            <feature-pack>
+                                <location>org.jboss.eap.cloud:eap-cloud-galleon-pack</location>
+                            </feature-pack>
+                            <feature-pack>
+                                <location>org.jboss.eap:eap-datasources-galleon-pack</location>
+                            </feature-pack>
+                        </feature-packs>
+                        <layers>
+                            <layer>cloud-server</layer>
+                            <layer>postgresql-datasource</layer>
+                        </layers>
+                        <filename>ROOT.war</filename>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>package</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+    </profile>
+</profiles>
+----
+
+If we examine the pom.xml snippet, we can see the inclusion of three feature packs:
+
+* https://github.com/jbossas/eap-cloud-galleon-pack/blob/main/doc/index.md[wildfly-ee-galleon-pack^]: The wildfly-ee-galleon-pack contains the features required to build an instance of JBoss EAP. This feature pack contains several layers (e.g., jaxrs-server and cloud-server).
+* https://github.com/jbossas/eap-cloud-galleon-pack/blob/main/doc/index.md[eap-cloud-galleon-pack^]: The org.jboss.eap.cloud:eap-cloud-galleon-pack Galleon feature-pack provisions a set of additional features allowing you to configure an
+EAP server to run on the cloud. The main features are as follows:
+** Server startup scripts: When starting an EAP server that was provisioned by the cloud feature-pack, a set of bash scripts are executed in order to adjust the server configuration. These scripts configure a range of server functions such as clustering, security, logging, messaging, tracing, and config management. Read more on this.
+** Adjustment of WildFly Galleon layers to tune for deployment on OpenShift, for example, disabling the management console. Read more on this.
+** Automatic provisioning of the health subsystem allows for server state monitoring and provides liveness and readiness probes.
+** Automatic routing of server logs to the console to ensure they are visible in the pod logs in the OpenShift console.
+* https://github.com/jbossas/eap-datasources-galleon-pack[eap-datasources-galleon-pack^]: This feature pack for JBoss EAP and JBoss EAP Expansion Pack provides JDBC drivers and data sources for the following databases:
+** Microsoft SQL Server
+** Oracle
+** PostgreSQL
+
+We can also see the inclusion of four layers in our pom.xml file snippet:
+
+* cloud-server: The cloud server layer is an extension of the jaxrs-server and datasources-web-server layers providing cloud-native functionality such as observability and jms-activemq.
+* postgresql-datasource: Adds support for postgresql database drivers, requires the eap-datasources-galleon-pack feature pack.
+
+The addition of datasources feature pack and postgresql-datasource layer will instruct the eap-maven-plugin to install and configure a data source to connect to a PostgreSQL database. If we look at the documentation for the PostgresSQL layer, we can see the need for a POSTGRESQL_DRIVER_VERSION build time environment variable. This build time environment variable is mandatory and tells the eap-maven-plugin which version of the PostgreSQL driver to install.
+
+== Deploy the application to OpenShift
+
+We need to push our code changes to our gitea repository.
+
+Click on the "Source Control" icon in the IDE, you should see the following:
+
+image::gitea-eap8-ocp.png[source-contol]
+
+Enter a commit message in the message field and click on the "Commit" button.
+
+You will be prompted to stage files to the commit
+
+image::git-2.png[stage-files]
+
+Click on "Yes" and then click on "Sync Changes" to push your changes to gitea
+
+You will be prompted to enter a username:
+
+image::git-3.png[git-username]
+
+Enter `{USER_ID}`
+
+You will then be prompted for a password:
+
+Enter `openshift`
+
+Your changes will be pushed to gitea.
+
+We can now deploy our JBoss EAP 8.0 application with Helm.
+
+Access the OpenShift console by clicking on the following {CONSOLE_URL}[link^] 
+
+Login with the following credentials:
+
+* *Username*: `{USER_ID}`
+* *Password*: `openshift`
+
+Switch to the project called "{USER_ID}-project"
+
+Click on Add+.
+
+Select Helm Chart from the developer catalog.
+
+Enter eap in the Filter by keyword field as shown below:
+
+image::helm-charts.png[migration,80%]
+
+Select the JBoss EAP 8 Helm chart from the catalog.
+
+Click on "Create".
+
+Switch to YAML view.
+
+Delete the existing content.
+
+Paste the following YAML:
+
+[source,yaml,role="copypaste"]
+----
+build:
+ uri: 'http://gitea.gitea.svc.cluster.local:3000/{USER_ID}/workshop.git'
+ ref: main
+ contextDir: app
+ env:
+   - name: POSTGRESQL_DRIVER_VERSION
+     value: '42.6.0'
+deploy:
+ replicas: 1
+ envFrom:
+    - configMapRef:
+        name: eap-config
+ env:
+    # Credentials to connect to the PostgreSQL databases
+    # and AMQ Broker are taken from their secrets
+    - name: POSTGRESQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          key: database-password
+          name: postgresql
+    - name: POSTGRESQL_USER
+      valueFrom:
+        secretKeyRef:
+          key: database-user
+          name: postgresql
+----
+
+Note: There are a few things to point out in this Helm configuration. We have defined a build time variable POSTGRESQL_DRIVER_VERSION to determine how the PostgreSQL driver version is passed to the eap-maven-plugin when S2I builds the application image. Runtime environment variables (such as user credentials) are read from a secret created when the database is instantiated. So application configuration can be safely stored in Git without any sensitive information.
+
+Two build-configs are created by this Helm chart: an artifacts build and a runtime build. When the second build is complete, the application will be deployed. The application is running when the pod donut around the JBoss EAP logo is dark blue (i.e., the pods are in a running state).
+
+It will take a while to build and deploy the application. To monitor the progress, follow these steps.
+
+Go to Builds. 
+
+image::eap8-builds.png[migration,80%]
+
+Select eap8-build-artifacts.
+
+Choose the Builds tab.
+
+Click on eap8-build-artifacts-1 to view the logs of the active build.
+
+Once the builds are complete, you will be able to click the Open URL icon of the eap8 deployment to view the running application.
+
+image::eap8-ocp.png[migration,80%]
+
+We've now completed the migration of our JBoss EAP 8.0 application to OpenShift.

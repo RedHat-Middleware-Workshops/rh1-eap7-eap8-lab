@@ -10,11 +10,14 @@ asciidoc:
     page-pagination: true
     experimental:
     numbered:
-    lab_name: "From Development to Deployment: Securing The Software Supply Chain with Red Hat OpenShift"
+    lab_name: "Migration from JBoss EAP 7.4 to JBoss EAP 8.0 on OpenShift"
     guid: my-guid
     ssh_user: lab-user
     ssh_password: lab-user
     ssh_command: ssh devops@bastion.{guid}.example.opentlc.com
+    DS_URL: devspaces.openshift.com
+    EAP8_VERSION: JBoss EAP 8-Beta
+    USER_ID: user1
 
   extensions:
     - ./content/lib/tab-block.js

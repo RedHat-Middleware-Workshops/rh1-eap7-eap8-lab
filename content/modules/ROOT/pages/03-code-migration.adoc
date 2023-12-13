@@ -1,0 +1,116 @@
+== Code Migration
+
+
+
+=== Automated file changes
+
+You can make the edits directly in the file as indicated, or in most cases you can right click on the file and select "Apply all quickfixes"
+
+You can also apply all the quickfixes to the code base by right clicking on "rh1-workshop-eap-app" at the top of the hierarchy and clicking on "Apply all guickfixes".
+
+image::windup-qf.png[windup-qf]
+
+Once you've applied the quickfixes, we will re-run the analysis report. This will allow us to focus on the remaining code changes.
+
+To perform the code analysis, click on the start button as shown below
+
+image::windup-start.png[windup-start]
+
+Once the analysis is completed, click on the report icon to view the report.  This time you should see the number of story points reduced.
+
+image::windup-2nd-run.png[windup-2nd-run]
+
+=== Remaining file changes
+
+The final few changes we need to make are in these two files.
+
+* persistence.xml
+* pom.xml
+
+If we look at the report we'll see the following relating to persistence.xml
+
+image::persistence-changes.png[persistence-changes]
+
+In the Analysis results tree click on "persistence.xml".  Change
+
+http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+
+to 
+
+https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+
+For the pom.xml changes, if we look at the report we will see the following:
+
+image::pom-changes1.png[pom-changes]
+
+image::pom-changes2.png[pom-changes]
+
+image::pom-changes3.png[pom-changes]
+
+Open the pom.xml file and make the following changes
+
+Change 
+        <dependency>
+            <groupId>org.jboss.spec.javax.ws.rs</groupId>
+            <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+to
+
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+Change
+
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-eap-jakartaee8-with-tools</artifactId>
+                <version>${version.server.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+to 
+
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-eap-ee-with-tools</artifactId>
+                <version>${version.server.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+Change
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+to
+
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+Finally, we need to change 
+
+<version.server.bom>7.4.0.GA</version.server.bom>
+
+to
+
+<version.server.bom>8.0.0.Beta-redhat-00004</version.server.bom>
+
+Once we've made these changes, we can re-run the analysys to ensure all changes are complete.  You should see zero story points as shown below:
+
+image::windup-complete.png[windup-complete]
+
+The code changes required to move from JBoss EAP 7.4 to JBoss EAP 8.0 are now complete, we can now move on to deployment to OpenShift.
+

@@ -1,9 +1,6 @@
-== Introduction and Challenge Overview
+== Introduction 
+{EAP8_VERSION} adds exciting new functionality in the areas of provisioning, cloud tooling, security, and Jakarta EE 10 compliance. The move to Jakarta EE 10 introduced some changes which will require customers to update their JBoss EAP 7.4 applications to enable them to run on JBoss EAP 8.0.
 
-=== Current Security Challenges
+In this lab you will be guided through these changes, working through the migration of a simple JBoss EAP 7.4 application to JBoss EAP 8.0 and deploying the application on OpenShift. 
 
-At Globex Retail Store, amidst the intricacies of container orchestration, we faced a dire security challenge. Sophisticated external attackers, alongside a rogue internal element, engaged in "typosquatting" by subtly altering deployment manifests. They introduced malicious container images that closely mimicked our trusted ones. For instance, our legitimate image globex/nginx:latest was deviously cloned as globex/ngnix:latest. These deceptive, nearly identical names posed a severe threat to the integrity and security of our network. This alarming development made it crystal clear: we urgently needed a solid defense mechanism to protect against both internal and external threats of typosquatting in deployment updates.
 
-=== Embracing a Solution with Cosign and Tekton Chains
-
-To combat this insidious form of cyber warfare, we turned to an innovative and powerful duo: Cosign for digitally signing container images and Tekton Chains for fortifying the integrity of our OpenShift Pipelines. Our workshop today focuses on understanding these tools and integrating them into our workflows to bolster our defenses against such devious attacks.

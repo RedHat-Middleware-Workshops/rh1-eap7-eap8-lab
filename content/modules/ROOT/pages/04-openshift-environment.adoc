@@ -1,0 +1,51 @@
+== OpenShift Environment
+
+Before we deploy our JBoss EAP 8.0 application on OpenShift, we need to deploy a PostgreSQL database.
+
+Access the OpenShift console by clicking on the following { CONSOLE_URL}[link^] 
+
+Login with the following credentials:
+
+* *Username*: `{USER_ID}`
+* *Password*: `openshift`
+
+*Switch to the project called "{USER_ID}-project"*
+
+## Deploy a PostgreSQL database
+
+Within this project, add a PostgreSQL database by Clicking on "+Add" and selecting "Database" from the Developer catalog.
+
+From the Developer catalog, select the "PostgreSQL" template and fill out the form details as shown below.
+
+image::postgresql-template.png[postgresql-template,80%]
+[source,sh]
+----
+* User name: postgresUser
+* Password: postgresPW
+* Database name: postgresDB
+----
+
+Click on "Create" to create the postgreSQL database instance.
+
+Switch to the Topology view, you should see the PostgeSQL database deployed and running.
+
+image::postgres-running.png[postgresql-running]
+
+While this is happening we can go ahead and create a config map containing runtime variables for out EAP application.  
+
+This config map contains non-sensitive information relating to the PostgreSQL connection connection such as the database service host and database name.  Sensitive information such as username / password will be pulled from the secrets created when these services where deployed.
+
+To create the config map, click on "ConfigMaps" on the left menu and click on "Create ConfigMap".  From the "Create ConfigMap" page, select "YAML view" and paste the following text:
+
+[source,yaml,role="copypaste"]
+----
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: eap-config
+data: 
+  # Configuration to connnect to PostgreSQL
+  POSTGRESQL_DATABASE: postgresDB
+  POSTGRESQL_DATASOURCE: postgresql
+  POSTGRESQL_SERVICE_HOST: postgresql
+----

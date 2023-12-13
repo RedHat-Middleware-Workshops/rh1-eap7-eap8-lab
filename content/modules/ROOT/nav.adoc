@@ -2,12 +2,12 @@
 
 * xref:01-introduction.adoc[2. Workshop Introduction]
 
-* xref:02-pipeline-overview.adoc[3. An Overview of your Pipeline]
+* xref:02-code-analysis.adoc[3. Performing Code Analysis]
 
-* xref:03-configure-acs-policy.adoc[4. Configuring ACS for Image Signatures Verification]
+* xref:03-code-migration.adoc[4. Making Code Changes]
 
-* xref:04-install-chains.adoc[5. Installing Tekton Chains for Image Signing]
+* xref:04-openshift-environment.adoc[5. Setting up OpenShift environment]
 
-* xref:05-resolve-deployment.adoc[6. Challenge: Resolve Deployment Issues]
+* xref:05-deployment.adoc[6. Deploying the JBoss EAP 8.0 application on OpenShift]
 
-* xref:06-learning-references.adoc[7. Learning References]
+* xref:06-summary.adoc[7. Summary]
