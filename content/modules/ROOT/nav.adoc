@@ -1,13 +1,23 @@
-* xref:00-agenda.adoc[1. Agenda]
+* xref:01-agenda.adoc[1. Agenda]
 
-* xref:01-introduction.adoc[2. Workshop Introduction]
+* xref:02-introduction.adoc[2. Workshop Introduction]
 
-* xref:02-code-analysis.adoc[3. Performing Code Analysis]
+* xref:03-eap-introduction.adoc[3. EAP 7.4 to EAP 8.0 Migration Lab]
 
-* xref:03-code-migration.adoc[4. Making Code Changes]
+** xref:31-code-analysis.adoc[3.1 Performing Code Analysis]
 
-* xref:04-openshift-environment.adoc[5. Setting up OpenShift environment]
+** xref:32-code-migration.adoc[3.2 Making Code Changes]
 
-* xref:05-deployment.adoc[6. Deploying the JBoss EAP 8.0 application on OpenShift]
+** xref:34-openshift-environment.adoc[3.3 Setting up OpenShift environment]
 
-* xref:06-summary.adoc[7. Summary]
+** xref:35-deployment.adoc[3.4 Deploying the EAP 8.0 application on OpenShift]
+
+** xref:36-summary.adoc[3.5 Summary]
+
+* xref:04-rhsi-introduction.adoc[4. Red Hat Service Interconnect Lab]
+
+* xref:05-fuse-to-camelq-introduction.adoc[5. Red Hat Fuse to Camel Quarkus Lab]
+
+** xref:51-migrate-the-service.adoc[5.1 Migrate the service]
+
+** xref:52-deploy-camelq-openshift.adoc[5.2 Deploy the Camel Quarkus service to OpenShift]

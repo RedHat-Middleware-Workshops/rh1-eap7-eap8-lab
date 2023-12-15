@@ -6,6 +6,8 @@ Now that we've performed the analysis of our code to determine the changes neede
 
 You can apply all the quickfixes to the code base by right clicking on "rh1-workshop-eap-app" at the top of the hierarchy and clicking on "Apply all guickfixes".
 
+This will make all the namespace changes from `javax` to `jakarta`, one of the key changes introduced by the move from JakartaEE 8 to JakartaEE 10.
+
 image::windup-qf.png[windup-qf]
 
 Once you've applied the quickfixes, we will re-run the analysis report. This will allow us to focus on the remaining code changes.
@@ -125,7 +127,7 @@ to
 ----
 <version.server.bom>8.0.0.Beta-redhat-00004</version.server.bom>
 ----
-Once we've made these changes, we can re-run the analysys to ensure all changes are complete.  You should see zero story points as shown below:
+Once we've made these changes, we can re-run the analysis to ensure all changes are complete.  You should see zero story points as shown below:
 
 image::windup-complete.png[windup-complete]
 

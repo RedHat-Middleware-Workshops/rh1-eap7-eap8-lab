@@ -3,4 +3,6 @@ JBoss EAP 8.0 adds exciting new functionality in the areas of provisioning, clou
 
 In this lab you will be guided through these changes, working through the migration of a simple JBoss EAP 7.4 application to JBoss EAP 8.0 and deploying the application on OpenShift. 
 
+== Overview of the application
+
 

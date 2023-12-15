@@ -1,0 +1,27 @@
+:quarkus-code-generator: link:https://code.quarkus.redhat.com/[Quarkus code generator, window="_blank", , id="rhd-source-article"]
+
+[id='lab-intro']
+= Lab Introduction
+
+_Red Hat Fuse_ is a _Karaf_ (OSGI) based container to run _Apache Camel_ (and _Java_) applications. However, since the appearance of containers and _Kubernetes_ environments, the preferred approach to deliver services is by adopting micro-services architectures.
+
+In this exercise you will undergo the process of migrating a _Red Hat Fuse_ service into a _Red Hat build of Apache Camel_ on _Quarkus_ application.
+
+{empty} +
+
+[time=1]
+[id="the-service"]
+== The service
+
+For illustration purposes, the picture below shows what the _Camel_ integration end-to-end flow looks like.
+
+image::camel-service.png[align="center", width=80%]
+
+The service exposes a REST (Json) entrypoint and integrates with two backends, one is REST based, and the second endpoint is SOAP based. 
+
+The integration represents a composition service. It obtains information from both end systems and merges the data to respond to the client request.
+
+The service currently runs on _Red Hat Fuse_ and we want to modernise it to run on _Camel Quarkus_.
+
+{empty} +
+

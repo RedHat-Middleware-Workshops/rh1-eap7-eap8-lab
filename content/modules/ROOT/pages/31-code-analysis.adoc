@@ -27,15 +27,15 @@ Once the analysis is complete, you should see a file hierachy in the left hand w
 
 At the top of the file hierarchy is a report icon (in green).  Click on this to view the HTML version of the report.
 
-image::windup-results.png[windup-results,80%]
+image::windup-results.png[windup-results]
 
 Clicking on a file will open up the editor showing where the issues are with the file.
 
 Click on "App" in the report, and then select the "Issues" tab to view the details of the migration.
 
-image::windup-report-issues.png[mtr-report-issues,80%]
+image::windup-report-issues.png[mtr-report-issues]
 
 You can also select a file from the hierarchy examine in the issues in the code.
 
-image::windup-file.png[windup-file,80%]
+image::windup-file.png[windup-file]
 
