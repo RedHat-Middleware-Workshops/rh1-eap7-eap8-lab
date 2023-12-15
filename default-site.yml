@@ -1,5 +1,5 @@
 site:
-  title: "JBoss & Fuse with OpenShift & RH Interconnect"
+  title: "Migrating JBoss EAP"
   url: https://redhat-scholars.github.io/course-template
   start_page: modules::index.adoc
 
