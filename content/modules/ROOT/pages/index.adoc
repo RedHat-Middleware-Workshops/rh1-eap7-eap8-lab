@@ -30,45 +30,6 @@ image::trust.png[trust]
 
 Click on "Yes, I trust these authors"
 
-// IMPORTANT: You will need to clone your personal git repository before you proceed with the workshop.
-
-// image::git-start.png[git-start, 80%]
-
-// Click on "Clone Git Repository..."
-
-// NOTE: If you don't see a "Clone Git Repository..." link, click on kbd:[CTRL+SHIFT+P] to enter the command pallate, and then enter "Git clone".
-
-// You will see the following at the top of your dev workspace:
-
-// image::git-url.png[clone-repo, 80%]
-
-// In the url bar enter the name of your personal git repository:
-
-// [source,sh,role="copypaste"]
-// ----
-// http://gitea.gitea.svc.cluster.local:3000/{USER_ID}/workshop.git
-
-// ----
-
-// Click on "Clone from url: \http://gitea.gitea.svc.cluster.local:3000/{USER_ID}/workshop.git"
-
-// You will be asked to choose a folder, enter: 
-
-// [source,sh,role="copypaste"]
-// ----
-// /projects
-// ----/home/phayes/projects/eap8-workshop/docs/images/openshift-login.png /home/phayes/projects/eap8-workshop/docs/images/openshift-username.png /home/phayes/projects/eap8-workshop/docs/images/devspaces-dashboard.png /home/phayes/projects/eap8-workshop/docs/images/devspaces-start.png
-
-// Click on "OK"
-
-// You will see the following message box:
-
-// image::git-workspace.png[git-workspace, 80%]
-
-// Click on "Open"
-
-// Your window will refresh and you should see:
-
 image::devspaces-start.png[devspaces-start]
 
 Users of Eclipse, IntelliJ IDEA or Visual Studio Code will see a familiar layout: a project/file browser on the left, a code editor on the right, and a terminal at the bottom. You'll use all of these during the course of this workshop, so keep this browser tab open throughout. **If things get weird, you can simply reload the browser tab to refresh the view.**
@@ -85,7 +46,7 @@ image::open-terminal.png[open-terminal]
 
 We will be pushing code changes to a git repository we have provisioned for each user.  Before pushing to git you will need to set your git email and name.  To do this, from the integrated terminal, enter the following commands.
 
-[source,sh,role="copypaste"]
+[source,sh,role="copypaste",subs=attributes+]
 ----
  git config --global user.email "{USER_ID}@example.com"
  git config --global user.name "{USER_ID}"

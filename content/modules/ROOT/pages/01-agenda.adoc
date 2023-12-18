@@ -1,4 +1,4 @@
-= Migrating from JBoss EAP 7.4 to JBoss EAP 8.0 on OpenShift
+= Replatforming JBoss EAP and Fuse with OpenShift and Red Hat Service Interconnect
 :toc:
 :toc-placement: preamble
 :sectnums:
@@ -6,9 +6,10 @@
 
 == Agenda
 
-In this workshop you will be guided through the following exercises
+In these labs you will be guided through the following exercises
 
-* Perform code analysis with the Migration Toolkit for Runtimes to itentify code changes required to migrate from JBoss EAP 7.4 to {EAP8_VERSION}.
-* Use the code analysis report to implement the required code changes to migrate from JBoss EAP 7.4 to JBoss EAP 8.0.
-* Setup the services required by the application on OpenShift.
-* Build and deploy the JBoss EAP 8.0 application on OpenShift.
+* Migration of a JBoss EAP 7.4 application to JBoss EAP 8.0
+* Deployment of a JBoss EAP 8.0 application to OpenShift
+* Configuration of Red Hat Service Interconnect to connect a service running on an inhouse datacenter to OpenShift.
+* Migration of a Red Hat Fuse application to Camel Quarkus
+* Deployment of a Camel Quarkus application to OpenShift

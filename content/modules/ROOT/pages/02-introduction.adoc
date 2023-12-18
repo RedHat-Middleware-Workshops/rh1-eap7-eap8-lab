@@ -1,7 +1,7 @@
 == Introduction 
-JBoss EAP 8.0 adds exciting new functionality in the areas of provisioning, cloud tooling, security, and Jakarta EE 10 compliance. The move to Jakarta EE 10 introduced some changes which will require customers to update their JBoss EAP 7.4 applications to enable them to run on JBoss EAP 8.0.
+JBoss EAP and Fuse continue to power thousands of Red Hat customers' mission critical applications across a wide range of industries. As technology trends continue to evolve, and new innovations from Red Hat are introduced, customers are evaluating how they can fit these pieces together to modernize how they deliver value to their customers, while maintaining business continuity and maximizing the value they're getting from their Red Hat investment.
 
-In this lab you will be guided through these changes, working through the migration of a simple JBoss EAP 7.4 application to JBoss EAP 8.0 and deploying the application on OpenShift. 
+In this workshop, you'll learn about capabilities recently introduced in JBoss EAP 8, both for developer and operations teams, and how they integrate with new innovations across the OpenShift and App Services portfolio. You'll then get hands on, migrating an EAP 7 application from on-prem to the cloud with EAP 8 and OpenShift using the Migration Toolkit for Applications. You will also see how to migrate apps which depend on Fuse with Karaf to the Red Hat build of Apache Camel on OpenShift. Finally you will keep the service running even during extended migrations by easily and securely connecting the apps back to on-prem resources using Red Hat Service Interconnect.
 
 == Overview of the application
 
