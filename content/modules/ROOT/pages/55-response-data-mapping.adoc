@@ -1,0 +1,434 @@
+
+== Response data mapping
+
+The migration is one step away from completion. Both endpoints (REST and SOAP) are now fully integrated.
+
+The data obtained from the backends needs now to be merged in what we call data composition. We need to migrate the code that maps both data responses into a JSON structure the client expects, as per the API contract (OpenApi).
+
+There are 3 resources we need to work on to complete the migration:
+
+. The `mapResponse` _Camel_ route in the `api-medium.xml` file.
+. The `response.xsl` stylesheet (data transformation)
+. The Junit `ServiceTest.java` that validates the end-to-end use case.
+
+Loyal to our test-driven approach, we start by updating the test unit to define the expected behaviour of the system. By migrating the final code blocks of the _Fuse_ implementation and running the test unit, we will be able to validate the code meets the original requirements.
+
+From your editor, open again the test unit _Java_ class:
+
+- *src/test/java/org/camel/example/ServiceTest.java*
+
+Now follow the steps indicated below:
+
+. Find in the file above the region of code with the following declaration:
++
+----
+    @Test
+    public void testServiceGetDetails() throws Exception{
+----
+
+. Scroll to the bottom of the test code to find the following place holder:
++
+----
+        // COPY/PASTE HERE JSON response checks <1>
+----
++
+.Click here to reveal notes
+[%collapsible]
+======
+<1> The assertions to validate the JSON response need to be included in this placeholder.
+======
+
+. Include the following code where it says `COPY/PASTE HERE JSON ...`:
++
+[source,java,role="copypaste"]
+----
+        //prepare exchange to test JSON assertions
+        DefaultExchange response = new DefaultExchange(context);
+        response.getIn().setBody(jsonResponse);
+
+        //prepare JsonPath language
+        Language lan = context.resolveLanguage("jsonpath");
+
+        //validate response  <1>
+        assertEquals("Some One",            lan.createExpression("client.fullName")    .evaluate(response, String.class), "ups");
+        assertEquals("1 Some Street",       lan.createExpression("client.addressLine1").evaluate(response, String.class), "ups");
+        assertEquals("Somewhere SOME C0D3", lan.createExpression("client.addressLine2").evaluate(response, String.class), "ups");
+        assertEquals("UK",                  lan.createExpression("client.addressLine3").evaluate(response, String.class), "ups");
+
+        assertEquals("01-01-2023", lan.createExpression("subscriptions.period.start").evaluate(response, String.class), "ups");
+        assertEquals("01-01-2024", lan.createExpression("subscriptions.period.end")  .evaluate(response, String.class), "ups");
+
+        assertEquals("i-001", lan.createExpression("subscriptions.packages[0].id").evaluate(response, String.class), "ups");
+        assertEquals("i-002", lan.createExpression("subscriptions.packages[1].id").evaluate(response, String.class), "ups");
+        assertEquals("i-018", lan.createExpression("subscriptions.packages[2].id").evaluate(response, String.class), "ups");
+
+        assertEquals(new Integer(16), lan.createExpression("subscriptions.packages[0].amount").evaluate(response, Integer.class), "ups");
+        assertEquals(new Integer(32), lan.createExpression("subscriptions.packages[1].amount").evaluate(response, Integer.class), "ups");
+        assertEquals(new Integer(200),lan.createExpression("subscriptions.packages[2].amount").evaluate(response, Integer.class), "ups");
+----
++
+.Click here for reveal the migrations differences.
+[%collapsible]
+======
+The code is the same as the original in _Fuse_, except for minor JUnit 5 version differences:
+
+<1> All `assertEquals` evaluations are the same as in _Fuse_ except JUnit 5 defines the message parameter as last method argument instead of first.
+======
++
+.Click here for reveal the original implementation.
+[%collapsible]
+======
+----
+...
+//prepare exchange to test JSON assertions
+DefaultExchange response = new DefaultExchange(context);
+response.getIn().setBody(jsonResponse);
+
+//prepare JsonPath language
+Language lan = context.resolveLanguage("jsonpath");
+
+//validate response
+assertEquals("ups", "Some One",            lan.createExpression("client.fullName")    .evaluate(response, String.class));
+assertEquals("ups", "1 Some Street",       lan.createExpression("client.addressLine1").evaluate(response, String.class));
+assertEquals("ups", "Somewhere SOME C0D3", lan.createExpression("client.addressLine2").evaluate(response, String.class));
+assertEquals("ups", "UK",                  lan.createExpression("client.addressLine3").evaluate(response, String.class));
+
+assertEquals("ups", "01-01-2023", lan.createExpression("subscriptions.period.start").evaluate(response, String.class));
+assertEquals("ups", "01-01-2024", lan.createExpression("subscriptions.period.end")  .evaluate(response, String.class));
+
+assertEquals("ups", "i-001", lan.createExpression("subscriptions.packages[0].id").evaluate(response, String.class));
+assertEquals("ups", "i-002", lan.createExpression("subscriptions.packages[1].id").evaluate(response, String.class));
+assertEquals("ups", "i-018", lan.createExpression("subscriptions.packages[2].id").evaluate(response, String.class));
+
+assertEquals("ups", new Integer(16), lan.createExpression("subscriptions.packages[0].amount").evaluate(response, Integer.class));
+assertEquals("ups", new Integer(32), lan.createExpression("subscriptions.packages[1].amount").evaluate(response, Integer.class));
+assertEquals("ups", new Integer(200),lan.createExpression("subscriptions.packages[2].amount").evaluate(response, Integer.class));
+----
+======
+
+The new assertions in the JUnit are introducing checks to validate the JSON data produced to respond to the caller.
+
+If you run the unit test again with:
+
+```bash
+./mvnw clean test
+```
+
+As expected, the test unit should fail with the following error message:
+----
+[ERROR] Failures: 
+[ERROR]   ServiceTest.testServiceGetDetails:126 ups ==> expected: <Some One> but was: <dummy>
+[INFO] 
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  28.057 s
+[INFO] Finished at: 2023-12-05T10:16:37Z
+[INFO] ------------------------------------------------------------------------
+----
+
+The error above is telling you the JSON response contains a field with the wrong value (`dummy`).
+
+The dummy response is injected in the route `mapResponse` by the following temporary instruction (waiting to be replaced by the migrated code):
+----
+<!-- REMOVE DUMMY RESPONSE -->
+<to uri="language:constant:resource:classpath:/data/dummy.json"/>
+----
+
+
+Let's finish the migration from _Fuse_ and make the JUnit succeed.
+
+There are 2 pending source files to update:
+
+. `api-medium.xml` where the route `mapResponse` is to be worked.
+. `response.xsl` where to define the data transformation.
+
+{empty} +
+
+
+Open in _Camel Quarkus_ the file containing the _Camel_ definitions, located at:
+
+- *src/main/resources/routes/api-medium.xml*
+
+Find in your template the following (empty) definition:
+----
+    <route id="mapResponse">
+      <from uri="direct:mapResponse"/>
+
+      <!-- COPY/PASTE DEFINITION HERE -->
+
+      <!-- REMOVE DUMMY RESPONSE -->
+      <to uri="language:constant:resource:classpath:/data/dummy.json"/>
+    </route>
+----
+
+And follow the instructions below:
+
+. Remove the following lines:
++
+----
+      <!-- REMOVE DUMMY RESPONSE -->
+      <to uri="language:constant:resource:classpath:/data/dummy.json"/>
+----
+
+. And replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
+
+[source,xml,role="copypaste"]
+----
+      <!-- PREPARE XSLT INPUTS -->
+      <setHeader name="response1">                                       <!-- 1 -->
+        <simple>${exchangeProperty.subscriber-response-rest}</simple>    <!-- 2 -->
+      </setHeader>
+      <setHeader name="response2">                                       <!-- 3 -->
+        <simple>${exchangeProperty.subscriber-response-soap}</simple>    <!-- 4 -->
+      </setHeader>
+
+      <!-- SET DUMMY XSLT INPUT (XSLT inputs passed as headers) -->
+      <setBody>
+        <simple>&lt;data/&gt;</simple>
+      </setBody>
+
+      <!-- TRANSFORM REQUEST JSON-to-XML -->
+      <to uri="xslt-saxon:xslt/response.xsl"/>                           <!-- 5 -->
+     
+      <removeHeaders pattern="*"/>
+----
+
+.Click here for reveal the migrations differences.
+[%collapsible]
+======
+In the snippet above the following migration changes have been applied to the original _Blueprint_ code (everything else has been left as-is).
+
+<1> The old attribute `headerName` is now `name`.
+<2> The attribute `resultType` has been deleted as XSLT 3.0 can natively handle (parse & convert) JSON/XML.
+<3> The old attribute `headerName` is now `name`.
+<4> The attribute `resultType` has been deleted as XSLT 3.0 can natively handle (parse & convert) JSON/XML.
+<5> The old _Camel_ component in _Fuse_ `xslt` (saxon) becomes `xslt-saxon` in the new version of _Camel_.
++
+NOTE: Also, the configuration option `saxonExtensionFunctions` has been deleted. In _Fuse_ the option was loading a custom xpath function to convert XML to JSON. With XSLT 3.0 the xpath function (xml-to-json) is available out-of-the-box.
+======
+
+.Click here for reveal the original Blueprint definition.
+[%collapsible]
+======
+----
+    <route id="mapResponse">
+      <from uri="direct:mapResponse"/>
+
+      <!-- PREPARE XSLT INPUTS -->
+      <setHeader headerName="response1">
+        <simple resultType="org.w3c.dom.Document">${exchangeProperty.subscriber-response-rest}</simple>
+      </setHeader>
+      <setHeader headerName="response2">
+        <simple  resultType="org.w3c.dom.Document">${exchangeProperty.subscriber-response-soap}</simple>
+      </setHeader>
+
+      <!-- SET DUMMY XSLT INPUT (XSLT inputs passed as headers) -->
+      <setBody>
+        <simple>&lt;data/&gt;</simple>
+      </setBody>
+
+      <!-- TRANSFORM REQUEST JSON-to-XML -->
+      <to uri="xslt:xslt/response.xsl?saxon=true&amp;saxonExtensionFunctions=#x2j"/>
+     
+      <removeHeaders pattern="*"/>
+    </route>
+----
+======
+
+In summary, the migrated _Camel_ route performs the following actions:
+
+. *Prepares (header) the JSON data (REST response) as an input for data mapping*.
+. *Prepares (header) the SOAP data (SOAP response) as an input for data mapping*.
+. *Executes the data transformation*.
+
+
+{empty} + 
+
+And the last file to migrate is the `response.xsl` where the data transformation happens, merging JSON and SOAP data (from the endpoints) to provide a JSON response to send back to the calling system.
+
+
+Open in _Camel Quarkus_ the following XSLT definition:
+
+- *src/main/resources/xslt/response.xsl*
+
+Find in the XSLT the following region of code:
+
+----
+<xsl:template match="/">
+
+    <!-- COPY/PASTE HERE data mapping -->
+
+</xsl:template>
+----
+
+Replace the line `<!-- COPY/PASTE HERE data mapping -->` with the snippet below:
+
+[source,xml,role="copypaste"]
+----
+    <!-- MAP XML INPUT TO XML FOR JSON 
+         as per: https://www.w3.org/TR/xslt-30/#json-to-xml-mapping -->
+        <xsl:variable name="input1" select="json-to-xml($response1)"/>         <!-- 1 -->
+        <xsl:variable name="input2" select="parse-xml($response2)"/>           <!-- 2 -->
+
+    <xsl:variable name="xml">
+
+        <map>
+            <!-- Data Mapping from the SOAP response -->
+            <map key="client">
+                <string key="fullName">
+                    <xsl:value-of select="concat($input2//Name,' ',$input2//Surname)"/>
+                </string>
+                <string key="addressLine1">
+                    <xsl:value-of select="concat($input2//Number,' ',$input2//Street)"/>
+                </string>
+                <string key="addressLine2">
+                    <xsl:value-of select="concat($input2//City,' ',$input2//PostCode)"/>
+                </string>
+                <string key="addressLine3">
+                    <xsl:value-of select="$input2//Country"/>
+                </string>
+            </map>
+
+            <!-- Data Mapping from the REST response (straight copy) -->
+            <xsl:copy-of select="$input1/*:map/*:map"/>                        <!-- 3 -->
+        </map>   
+    </xsl:variable>
+
+    <!-- JSON OUTPUT -->
+    <xsl:value-of select="xml-to-json($xml)"/>                                 <!-- 4 -->
+----
+
+.Click here for reveal the migrations differences.
+[%collapsible]
+======
+In the snippet above the following migration changes have been applied to the original XSLT in _Fuse_.
+
+<1> `response1` (REST response) is now natively converted using `json-to-xml` instead of externally executing the conversion.
++
+NOTE: To understand better how XSLT 3.0 handles JSON natively, refer to the following specification: +
+https://www.w3.org/TR/xslt-30/#json-to-xml-mapping
+<2> `response2` (SOAP response) is now natively parsed using `parse-xml` instead of externally casting into an XML Document as a pre-processing step.
+
+<3> `copy-of` replaces an entire branch mapping done in _Fuse_ with `<map key="subscriptions">`. +
+This is because native JSON handling automatically provides an XML representation of the JSON structure that can be directly be copied.
++
+[NOTE]
+--
+* In _Fuse_ the input was pre-processed JSON converted into XML before executing the XSLT, hence the need to map the entire `<map>` branch.
+* In contrast, in the new version, no pre-processing takes place. The input JSON like `{...}` is converted into `<map>...</map>`, hence the possibility of mapping with `copy-of`
+--
+
+<4> The native XPath 3.0 function `xml-to-json` replaces the old custom function `custom:xml-to-json($xml)` implemented in _Fuse_ to render the JSON output data.
+======
+
+.Click here for reveal the original XSLT definition.
+[%collapsible]
+======
+----
+<xsl:stylesheet version="2.0" 
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+xmlns:custom="http://custom/extension/functions" 
+exclude-result-prefixes="custom">
+
+<xsl:output method="text" encoding="UTF-8"/>
+
+<xsl:param name="response1"/>
+<xsl:param name="response2"/>
+
+<xsl:template match="/">
+
+    <xsl:variable name="input1" select="$response1"/>
+    <xsl:variable name="input2" select="$response2"/>
+
+    <xsl:variable name="xml">
+        <map>
+            <map key="client">
+                <string key="fullName">
+                    <xsl:value-of select="concat($input2//Name,' ',$input2//Surname)"/>
+                </string>
+                <string key="addressLine1">
+                    <xsl:value-of select="concat($input2//Number,' ',$input2//Street)"/>
+                </string>
+                <string key="addressLine2">
+                    <xsl:value-of select="concat($input2//City,' ',$input2//PostCode)"/>
+                </string>
+                <string key="addressLine3">
+                    <xsl:value-of select="$input2//Country"/>
+                </string>
+            </map>
+            <map key="subscriptions">
+                <map key="period">
+                    <string key="start">
+                        <xsl:value-of select="$input1//start"/>
+                    </string>
+                    <string key="end">
+                        <xsl:value-of select="$input1//end"/>                       
+                    </string>
+                </map>
+                <array key="packages">
+                    <xsl:for-each select="$input1//packages">
+                        <map>
+                            <string key="id">
+                                <xsl:value-of select="id"/>
+                            </string>
+                            <number key="amount">
+                                <xsl:value-of select="amount"/>                       
+                            </number>
+                        </map>
+                    </xsl:for-each>
+                </array>
+            </map>
+        </map>   
+    </xsl:variable>
+
+    <!-- XML REPRESENTATION OF JSON -->
+    <xsl:value-of select="custom:xml-to-json($xml)"/>
+
+</xsl:template>
+</xsl:stylesheet>
+----
+======
+
+Ok, all the source files from _Fuse_ have now been migrated to _Camel Quarkus_. Let's validate it with the JUnit.
+
+Rerun the test unit with:
+
+```bash
+./mvnw clean test
+```
+
+Given the dummy injected response has been replaced with the actual data mapping, the resulting execution should show:
+----
+...
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  26.882 s
+[INFO] Finished at: 2023-12-05T13:31:37Z
+[INFO] ------------------------------------------------------------------------
+----
+
+Your Junit now succeeds to validate the following requirements:
+
+* Successfully call the exposed REST service `/camel/subscriber/details`
+* The main route calls the `call-system1` sub-route.
+* The `call-system1` route prepares and sends a REST request.
+* The REST mock server receives the JSON request.
+* The JUnit captures the backend JSON request and validates its payload.
+* The `call-system2` route prepares and sends a SOAP request.
+* The SOAP mock server receives the SOAP request.
+* The JUnit captures the backend SOAP request and validates its payload.
+* The JSON response back to the client is valid and contains the merged data as expected.
+
+{empty} +
+
+Bravo, mission accomplished !!
+
+The REST service, originally implemented in _Fuse_ for _Karaf_ is now migrated to _Camel_ on _Quarkus_.

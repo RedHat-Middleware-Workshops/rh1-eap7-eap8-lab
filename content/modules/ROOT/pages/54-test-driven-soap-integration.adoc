@@ -1,0 +1,442 @@
+
+== Test driven SOAP integration
+
+We now focus attention to the integration with the SOAP endpoint.
+
+Still following a test-driven approach, include the checks below in your JUnit:
+
+. Find in your _Camel Quarkus_ project the region of code with the following declaration:
++
+----
+    @Test
+    public void testServiceGetDetails() throws Exception{
+
+        MockEndpoint rest = getMockEndpoint("mock:backend-rest"); 
+        rest.expectedMessageCount(1);
+
+        // COPY/PASTE HERE SOAP MOCK <1>
+
+        ...
+----
++
+.Click here to reveal notes
+[%collapsible]
+======
+<1> This is the placeholder where to keep hold of the embedded SOAP mock.
+======
+
+. Include the following code where it says `COPY/PASTE HERE SOAP MOCK`:
++
+[source,java,role="copypaste"]
+----
+        //set Mock expectations
+        MockEndpoint soap = getMockEndpoint("mock:backend-soap");  // <1>
+        soap.expectedMessageCount(1);                              // <2>
+----
++
+.Click here to reveal notes
+[%collapsible]
+======
+<1> Uses Camel's testing framework to obtain the SOAP Mock endpoint.
+<2> Sets the expectation on the Mock it should receive a request from _Camel_.
+======
+
+. Scroll to the botton of the `testServiceGetDetails()` test unit and include the following code where it says `COPY/PASTE HERE SOAP checks`:
++
+[source,java,role="copypaste"]
+----
+        //obtain request sent to SOAP backend
+        org.example.s1.SubscriberRequest soapMessage = 
+                soap.getExchanges().get(0).getIn().getBody(org.example.s1.SubscriberRequest.class);
+
+        //validate request to SOAP backend
+        assertNotNull(soapMessage, "something is wrong.");  // <1>
+        assertEquals("123", soapMessage.getId(), "oh oh");  // <2>
+
+        // COPY/PASTE HERE JSON response checks <3>
+----
++
+.Click here for reveal the migrations differences.
+[%collapsible]
+======
+The code is the same as the original in _Fuse_, except for minor JUnit 5 version differences:
+
+<1> The `assertNotNull` invocation is the same except JUnit 5 defines the message argument in last position instead of first.
+<2> The `assertEquals` also defines the message argument in last position instead of first.
+<3> Leave this slot for later. +
+The assertions to validate the final JSON response will be added later in the lab.
+======
++
+.Click here for reveal the original implementation.
+[%collapsible]
+======
+----
+    @Test
+    public void testServiceGetDetails() throws Exception{
+
+        ...
+
+        //obtain request sent to SOAP backend
+        org.example.s1.SubscriberRequest soapMessage = 
+                soap.getExchanges().get(0).getIn().getBody(org.example.s1.SubscriberRequest.class);
+
+        //validate request to SOAP backend
+        assertNotNull(soapMessage, "something is wrong.");
+        assertEquals("123", soapMessage.getId(), "oh oh");
+
+        ...
+----
+======
+
+The new changes in the JUnit are introducing checks to validate SOAP functionality that hasn't been migrated yet.
+
+If you run the unit test again with:
+
+```bash
+./mvnw clean test
+```
+
+Again, not surprisingly, you should see your test unit fail with the following error message:
+----
+[ERROR] Failures: 
+[ERROR]   ServiceTest.testServiceGetDetails:97 mock://backend-soap Received message count. Expected: <1> but was: <0>
+[INFO] 
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+----
+
+The error above is telling you the mock (SOAP) server never got called by _Camel_. This is obvious, as the _Camel_ route invoking the SOAP backend is still missing (not migrated).
+
+Let's migrate the necessary code from _Fuse_ so that the JUnit succeeds.
+
+There are 2 _Camel_ routes dedicated to integrate with the SOAP endpoint:
+
+* `<route id="call-system2">` +
+Contains the processing steps to interact with the SOAP server
+* `<route id="json2soap">` +
+Converts the JSON request into a SOAP request
+
+{empty} +
+
+
+Open in _Camel Quarkus_ the file containing the _Camel_ definitions, located at:
+
+- *src/main/resources/routes/api-medium.xml*
+
+Find in your template the following definition (empty):
+----
+    <route id="call-system2">
+      <from uri="direct:call-system2"/>
+      <!-- COPY/PASTE DEFINITION HERE -->
+      <log message="dummy call-system2 (to be removed)"/>
+    </route>
+----
+
+Replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
+
+[source,xml,role="copypaste"]
+----
+      <!-- TRANSFORM REQUEST JSON-to-SOAP -->
+      <to uri="direct:json2soap"/>
+
+      <!-- CALL to BACKEND -->
+      <removeHeaders pattern="*"/>
+      <setHeader name="CamelDestinationOverrideUrl">                <!-- 1 -->
+        <simple>http://{{api.backend2.host}}/services/s1</simple>
+      </setHeader>
+      <to id="end2" uri="cxf:bean:s1"/>
+
+      <!-- UNWRAPS CXF RESPONSE (CXF delivers array) -->
+      <setBody>
+        <simple>${body[0]}</simple>
+      </setBody>
+
+      <!-- KEEP RESPONSE -->
+      <setProperty name="subscriber-response-soap">                 <!-- 2 -->
+        <simple resultType="String">${body}</simple>
+      </setProperty>
+
+      <log message="Backend2 is: ${exchangeProperty.subscriber-response-soap}"/>
+----
+
+.Click here for reveal the migrations differences.
+[%collapsible]
+======
+In the snippet above the following migration changes have been applied to the original _Blueprint_ code (everything else has been left as-is).
+
+<1> The old attribute `headerName` is now `name`.
+<2> The attribute `propertyName` as now `name`
+======
+
+.Click here for reveal the original Blueprint definition.
+[%collapsible]
+======
+----
+    <route id="call-system2">
+      <from uri="direct:call-system2"/>
+
+      <!-- TRANSFORM REQUEST JSON-to-SOAP -->
+      <to uri="direct:json2soap"/>
+
+      <!-- CALL to BACKEND -->
+      <removeHeaders pattern="*"/>
+      <setHeader headerName="CamelDestinationOverrideUrl">
+        <simple>http://{{api.backend2.host}}/services/s1</simple>
+      </setHeader>
+      <to id="end2" uri="cxf:bean:s1"/>
+
+      <!-- UNWRAPS CXF RESPONSE (CXF delivers array) -->
+      <setBody>
+      	<simple>${body[0]}</simple>
+      </setBody>
+
+      <!-- KEEP RESPONSE -->
+      <setProperty propertyName="subscriber-response-soap">
+        <simple resultType="String">${body}</simple>
+      </setProperty>
+
+      <log message="Backend2 is: ${exchangeProperty.subscriber-response-soap}"/>
+    </route>
+----
+======
+
+In summary, the migrated _Camel_ route performs the following actions:
+
+. *Transforms the incoming client JSON request into SOAP*.
+. *Prepares and triggers the call to the SOAP backend*.
+. *Unwraps the SOAP response*.
+. *Keeps the response in a process variable (Exchange property)*.
+
+The implemented interaction with the SOAP backend is illustrated in the sub-diagram shown below:
+
+image::camel-callbackend2.png[align="center", width=30%]
+
+{empty} +
+
+Let's migrate now the second route. +
+Find in your template the following definition (empty):
+----
+    <route id="json2soap">
+      <from uri="direct:json2soap"/>
+      <!-- COPY/PASTE DEFINITION HERE -->
+      <log message="dummy"/>
+    </route>
+----
+
+Replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
+
+[source,xml,role="copypaste"]
+----
+      <!-- SET ORIGINAL JSON REQUEST -->
+      <setHeader name="json">                            <!-- 1 -->
+        <simple>${exchangeProperty.request}</simple>
+      </setHeader>
+
+      <!-- SET DUMMY XSLT INPUT (real input comes from header 'json') -->
+      <setBody>
+        <simple>&lt;data/&gt;</simple>                   <!-- 2 -->
+      </setBody>
+
+      <!-- TRANSFORM REQUEST JSON-to-SOAP -->            <!-- 3 -->
+      <to uri="xslt-saxon:xslt/request.xsl"/>            <!-- 4 -->
+----
+
+.Click here for reveal the migrations differences.
+[%collapsible]
+======
+In the snippet above the following migration changes have been applied to the original _Blueprint_ code.
+
+<1> `setHeader` replaces the old `setBody`.
++
+NOTE: The new code directly injects JSON into the XSLT (as a header `json`). The old code did not use native JSON handling and required some pre-processing.
+<2> Although unused during XSLT processing in favour of the `json` header, the body is set with dummy `<data/>` because XSLT requires non-empty XML input.
+<3> Because XSLT 3.0 can natively handle JSON in _Camel_ 4 , we can discard the pre-processing `direct:json2xml` route needed in the old _Fuse_ code.
+<4> The old _Camel_ component in _Fuse_ `xslt` (saxon) becomes `xslt-saxon` in the new version of _Camel_.
++
+NOTE: the XSLT itself consequently requires migration changes as well (covered later in the lab).
+======
+
+.Click here for reveal the original Blueprint definition.
+[%collapsible]
+======
+----
+    <route id="json2soap">
+      <from uri="direct:json2soap"/>
+
+      <!-- SET ORIGINAL JSON REQUEST -->
+      <setBody>
+        <simple>${exchangeProperty.request}</simple>
+      </setBody>
+
+      <!-- TRANSFORM REQUEST JSON-to-SOAP -->
+      <to uri="direct:json2xml"/>                   <1>
+      <to uri="xslt:xslt/request.xsl?saxon=true"/>
+    </route>
+----
+
+<1> Because XSLT 3.0 can natively handle JSON in _Camel_ 4 , we can discard the pre-processing `direct:json2xml` route needed in the old Fuse code.
+======
+
+In summary, the migrated _Camel_ route executes the following actions:
+
+. *Prepares the JSON input (as a header) for the XSLT*.
+. *Executes the `request.xsl` stylesheet to transform JSON into SOAP*.
+
+{empty} +
+
+One last migration step is to update the XSLT transformation to use native JSON handling with XPATH 3.0.
+
+NOTE: Although XSLT 3.0 was supported in _Fuse_, the old _Saxon_ dependency version required an enterprise licence. This is not a problem in _Red Hat build of Apache Camel_.
+
+
+Open in _Camel Quarkus_ the following XSLT definition:
+
+- *src/main/resources/xslt/request.xsl*
+
+Replace the line `<!-- COPY/UPDATE mapping here -->` with the snippet below:
+
+[source,xml,role="copypaste"]
+----
+	<!-- Helper template to convert JSON into XML
+		 as per: https://www.w3.org/TR/xslt-30/#json-to-xml-mapping -->
+	<xsl:import href="common/j2x.xsl"/>                                 <!-- 1 -->
+
+	<!-- The actual data mapping -->
+	<xsl:template match="map">                                          <!-- 2 -->
+      <s1:SubscriberRequest xmlns:s1="http://www.example.org/s1/">
+         <Id><xsl:value-of select="/map/string[@key='id']"/></Id>       <!-- 3 -->
+      </s1:SubscriberRequest>
+	</xsl:template>
+----
+
+.Click here for reveal the migrations differences.
+[%collapsible]
+======
+In the snippet above the following migration changes have been applied to the original XSLT.
+
+<1> The import `j2x.xsl` has been added to convert the JSON input into an XML format that represents the JSON structure.
++
+.Click here for reveal the `j2x.xsl` content.
+[%collapsible]
+========
+----
+<xsl:stylesheet version="3.0" 
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+xmlns:xf="http://www.w3.org/2005/xpath-functions"
+exclude-result-prefixes="xf">
+
+	<xsl:output method="xml" indent="yes" omit-xml-declaration="yes"/>
+
+	<xsl:param name="json"/>                                  <1>
+
+	<xsl:template match="data">
+		<xsl:apply-templates select="json-to-xml($json)" />   <2>
+	</xsl:template>
+
+</xsl:stylesheet>
+----
+<1> The parameter declaration where the JSON payload is injected (as a header in the _Camel_ route).
+<2> The Xpath 3.0 function natively available to convert JSON into its XML representation.
+========
++
+NOTE: To understand better how XSLT 3.0 handles JSON natively, refer to the following specification: +
+https://www.w3.org/TR/xslt-30/#json-to-xml-mapping
+
+<2> `match="map"` replaces `match="/"`. +
+This is because the new mapping works against the XML representation of the JSON structure (as per the XSLT 3.0 spec).
++
+[NOTE]
+--
+* In _Fuse_ the input was pre-processed JSON converted into XML before executing the XSLT, hence the `match="/"` to find the root of the document.
+* In contrast, in the new version, no pre-processing takes place. The input JSON like `{...}` is converted into `<map>...</map>`, hence the `match="map"`
+--
+
+<3> The `select` expression uses `/map/string[]` to find the node from the XML representation of JSON. In _Fuse_ the expression just looked for the `id` node from the pre-processed XML structure.
+======
+
+.Click here for reveal the original Blueprint definition.
+[%collapsible]
+======
+----
+	<xsl:template match="/">
+      <s1:SubscriberRequest xmlns:s1="http://www.example.org/s1/">
+         <Id><xsl:value-of select="//id"/></Id>
+      </s1:SubscriberRequest>
+	</xsl:template>
+----
+======
+
+Almost there. +
+Before executing one more time the Junit to validate the latest migration changes, let's add in the test unit the SOAP endpoint reconfiguration to point to the embedded mock SOAP.
+
+Edit again the test unit in your _Camel Quarkus_ project:
+
+- *src/test/java/org/camel/example/ServiceTest.java*
+
+And follow the steps indicated below:
+
+. Find in your _Camel Quarkus_ project the region of code with the following declaration:
++
+----
+    private void reconfigureEndpoints() throws Exception {
+        ...
+
+        // COPY/PASTE HERE SOAP reconfiguration       
+    }
+----
+
+. Include the following code where it says `COPY/PASTE HERE SOAP ...`:
++
+[source,java,role="copypaste"]
+----
+        //reconfigure SOAP endpoint <1>
+        AdviceWith.adviceWith(context, "call-system2", a -> {
+          a.weaveById("end2").before()
+           .setHeader("CamelDestinationOverrideUrl").simple(host+"/services/s1");
+        });
+----
++
+.Click here to reveal notes
+[%collapsible]
+======
+<1> The `AdviceWith` directive ensures the random port is used when calling the SOAP mock server.
+======
+
+You have now completed the integration with the SOAP endpoint (and configured the Junit) in order to call the SOAP backend and obtain a response.
+
+Rerun the test unit with:
+
+```bash
+./mvnw clean test
+```
+
+While earlier the Junit was failing to validate the SOAP implementation, now it should pass and the following message should show:
+----
+...
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  24.796 s
+[INFO] Finished at: 2023-12-04T13:40:56Z
+[INFO] ------------------------------------------------------------------------
+----
+
+Your Junit now succeeds to validate the following requirements:
+
+* Successfully call the exposed REST service `/camel/subscriber/details`
+* The main route calls the `call-system1` sub-route.
+* The `call-system1` route prepares and sends a REST request.
+* The REST mock server receives the JSON request.
+* The JUnit captures the backend JSON request and validates its payload.
+* The `call-system2` route prepares and sends a SOAP request.
+* The SOAP mock server receives the SOAP request.
+* The JUnit captures the backend SOAP request and validates its payload.
+
+{empty} +

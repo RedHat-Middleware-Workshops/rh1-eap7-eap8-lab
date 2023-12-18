@@ -1,0 +1,482 @@
+
+== Test-driven migration 
+
+We intend in this section to migrate the region of code that integrates with the REST endpoint.
+
+As hinted in the previous section, the plan is to adopt a test-driven approach, and start by migrating a portion of the _Fuse_ Junit that will help ensuring it meets the functional expectations.
+
+The most significant difference between the original _Fuse_ Junit and the new one for _Camel Quarkus_ is the use of the _Camel_ test support class.
+
+- For _Blueprint_ (_Fuse on Karaf_) projects you define test units as follows:
++
+----
+public class ServiceTest extends CamelBlueprintTestSupport {
+----
+
+- For _Camel_ on _Quarkus_ projects you declare your unit test as:
++
+----
+@QuarkusTest
+public class ServiceTest extends CamelQuarkusTestSupport {
+----
+
+
+We've created a skeleton to accelerate the migration of the test unit. You only need to fill up the most relevant parts. You'll notice that the original code from _Fuse_, for the most part, is kept as-is with minor differences.
+
+
+Open the following Java file from your _Camel Quarkus_ project:
+
+- *src/test/java/org/camel/example/ServiceTest.java*
+
+Now follow the steps described below:
+
+Migrate from _Fuse_ the mock servers defined in the Junit as indicated.
+
+. Find in your _Camel Quarkus_ project the region of code with the following declaration:
++
+----
+    @Override
+    protected RouteBuilder createRouteBuilder() {
+        return new RouteBuilder() {
+            @Override
+            public void configure() throws Exception {
+
+                // COPY/PASTE HERE the embedded Camel routes
+            }
+        };
+    }
+----
+
+. Include the following code where it says `COPY/PASTE HERE ...`:
++
+[source,java,role="copypaste"]
+----
+                //Quarkus random server port requires to reconfigure endpoints
+                reconfigureEndpoints();  // <1>
+
+                rest("/unit/test")
+                    .post("/subscriber/details")
+                    .to("direct:backend-rest");
+
+                from("direct:backend-rest")
+                    .id("backend-rest-listener")
+                    .to("mock:backend-rest")
+                    .to("language:constant:resource:classpath:rest/response.json");
+
+                from("cxf:bean:s1")
+                    .id("backend-soap-listener")
+                    .setBody().simple("${body[0]}")
+                    .to("mock:backend-soap")
+                    .log("Stub got request: ${body}")
+                    .to("language:constant:resource:classpath:soap/response.xml");
+----
+
+
+.Click here for reveal the migrations differences.
+[%collapsible]
+======
+<1> The _RouteBuilder_ implementation is exactly the same in both versions (_Fuse_ and _Camel Quarkus_), except for the following line of code:
+----
+    reconfigureEndpoints();
+----
+NOTE: This new line is needed because the mechanism to configure test values in _Camel Quarkus_ is different than in _Karaf_. We will mention this again during the exercise.
+======
+
+.Click here for reveal the original `RouteBuilder` implementation.
+[%collapsible]
+======
+----
+    @Override
+    protected RouteBuilder createRouteBuilder() {
+        return new RouteBuilder() {
+            @Override
+            public void configure() throws Exception {
+
+			    rest("/unit/test")
+			        .post("/subscriber/details")
+			        .to("direct:backend-rest");
+
+			    from("direct:backend-rest")
+                    .id("backend-rest-listener")
+			        .to("mock:backend-rest")
+			        .to("language:constant:resource:classpath:rest/response.json");
+
+                from("cxf:bean:s1")
+                    .id("backend-soap-listener")
+                    .setBody().simple("${body[0]}")
+                    .to("mock:backend-soap")
+                    .log("Stub got request: ${body}")
+                    .to("language:constant:resource:classpath:soap/response.xml");
+            }
+        };
+    }
+----
+======
+
+
+The embedded Camel routes above implement the REST and SOAP mock backends you saw earlier in the diagram:
+
+image::test-unit-mocks.png[align="center", width=20%]
+
+{empty} +
+
+You can now focus your attention on the main test unit named `testServiceGetDetails()`.
+
+You will complete its implementation in stages. First, let's validate the processing logic sending traffic to the first endpoint (REST backend). Later you will validate also the call to the SOAP endpoint.
+
+. Find in your _Camel Quarkus_ project the region of code with the following declaration:
++
+----
+    @Test
+    public void testServiceGetDetails() throws Exception{
+
+        // COPY/PASTE HERE REST checks <1>
+
+        // COPY/PASTE HERE SOAP checks <2>
+
+        // COPY/PASTE HERE JSON response checks <3>
+    }
+----
++
+.Click here to reveal notes
+[%collapsible]
+======
+<1> This is where the first block of code (below) is to be included.
+<2> Leave this slot for later.
+<3> Leave this slot for later.
+======
+
+. Include the following code under the lines `COPY/PASTE HERE REST checks`:
++
+[source,java,role="copypaste"]
+----
+        MockEndpoint rest = getMockEndpoint("mock:backend-rest"); 
+        rest.expectedMessageCount(1);
+
+        // COPY/PASTE HERE SOAP MOCK <1>
+
+        //prepare new request to destination Netty endpoint
+        DefaultExchange request = new DefaultExchange(context);
+        request.getIn().setBody("{\"id\":\"123\"}");
+
+        //Entrypoint address <2>
+        String uri = "http://localhost:{{quarkus.http.test-port}}/camel/subscriber/details";
+
+        //invoke service
+        String jsonResponse = template.requestBody(uri, "{\"id\":\"123\"}", String.class);
+
+        //validate stub expectations
+        MockEndpoint.assertIsSatisfied(context);
+
+        //obtain request sent to REST backend
+        String restMessage = 
+                rest.getExchanges().get(0).getIn().getBody(String.class);
+
+        //validate request to REST backend
+        assertEquals("{\"id\":\"123\"}", restMessage, "oh oh"); // <3>
+
+        // COPY/PASTE HERE SOAP checks <4>
+----
+
+.Click here for reveal the migrations differences.
+[%collapsible]
+======
+<1> Leave this slot for later. +
+The SOAP backend checks will be added later in the lab.
+<2> The variable `uri` is now configured with `{{quarkus.http.test-port}}` instead of `{{rest.host}}:{{rest.port}}`.
++
+NOTE: We need to use the Quarkus-specific randomly allocated port.
+<3> The `assertEquals` invocation is the same except, JUnit 5 defines the message argument in last position instead of first.
+<4> Leave this slot for later. +
+The SOAP assertions will be added later in the lab.
+======
+
+.Click here for reveal the original implementation.
+[%collapsible]
+======
+----
+	@Test
+	public void testServiceGetDetails() throws Exception{
+
+        //set Mock expectations
+        MockEndpoint rest = getMockEndpoint("mock:backend-rest"); 
+        rest.expectedMessageCount(1);
+
+        //set Mock expectations
+        MockEndpoint soap = getMockEndpoint("mock:backend-soap"); 
+        soap.expectedMessageCount(1);
+
+		//prepare new request to destination Netty endpoint
+		DefaultExchange request = new DefaultExchange(context);
+		request.getIn().setBody("{\"id\":\"123\"}");
+
+        //Entrypoint address
+		String uri = "http://{{rest.host}}:{{rest.port}}/camel/subscriber/details";
+
+		//invoke service
+		String jsonResponse = template.requestBody(uri, "{\"id\":\"123\"}", String.class);
+
+        //validate stub expectations
+        MockEndpoint.assertIsSatisfied(context);
+
+        //obtain request sent to REST backend
+        String restMessage = 
+                rest.getExchanges().get(0).getIn().getBody(String.class);
+
+        //validate request to REST backend
+        assertEquals("oh oh", "{\"id\":\"123\"}", restMessage);
+
+        ...
+----
+======
+
+You have now a minimal JUnit. Run it with the command below:
+
+```bash
+./mvnw clean test
+```
+
+Not surprisingly you should see your test unit fail with the following error messages:
+----
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   ServiceTest.testServiceGetDetails:87 mock://backend-rest Received message count. Expected: <1> but was: <0>
+[INFO] 
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  35.989 s
+[INFO] Finished at: 2023-12-05T16:41:56Z
+[INFO] ------------------------------------------------------------------------
+----
+
+The error above (`Expected: <1> but was: (0)`) is telling you the mock (REST) server never got called by _Camel_. This is only normal because you haven't migrated yet the _Camel_ route invoking the REST backend.
+
+You can visually check, by scrolling up in your terminal, how _Camel_ printed out (log actions) dummy messages instead of performing outbound calls:
+----
+...
+[timestamp] ... dummy call-system1 (to be removed)
+[timestamp] ... dummy call-system2 (to be removed)
+...
+----
+
+However, the test allows you to validate the following bullet points:
+
+* The JUnit is successfully calling the exposed REST service `/camel/subscriber/details`
+* The main route you have migrated is properly executing.
+* By failing, the junit is letting you know the functionality to invoke the REST endpoint is still not complete.
+
+{empty} +
+
+Let's work on the code and make the Junit succeed !
+
+{empty} +
+
+#### REST endpoint
+
+Let's migrate the `call-system1` _Camel_ route that contains the integration logic with the REST endpoint.
+
+In summary, the route prepares and sends a JSON request to the backend and obtains a response that is lodged in a process variable (_Exchange_ property).
+
+Open in _Camel Quarkus_ the file containing the _Camel_ definitions, located at:
+
+- *src/main/resources/routes/api-medium.xml*
+
+Find in your template the following definition (empty):
+----
+    <route id="call-system1">
+      <from uri="direct:call-system1"/>
+      <!-- COPY/PASTE DEFINITION HERE -->
+      <log message="dummy call-system1 (to be removed)"/>
+    </route>
+----
+
+Replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
+
+[source,xml,role="copypaste"]
+----
+      <log message="calling Backend1 with: ${body}"/>
+
+      <!-- CALL to BACKEND -->
+      <removeHeaders pattern="*"/>
+      <setHeader name="content-type">                  <!-- 1 -->
+        <constant>application/json</constant>
+      </setHeader>
+      <to id="end1" uri="http:{{api.backend1.host}}{{api.backend1.path}}"/>
+
+      <!-- BUFFERED RESPONSE to STRING -->
+      <convertBodyTo type="String"/>                   <!-- 2,3 -->
+
+      <!-- KEEP RESPONSE -->
+      <setProperty name="subscriber-response-rest">    <!-- 4 -->
+        <simple>${body}</simple>
+      </setProperty>
+
+      <log message="Backend1 is: ${exchangeProperty.subscriber-response-rest}"/>
+----
+
+.Click here for reveal the migrations differences.
+[%collapsible]
+======
+In the snippet above the following migration changes have been applied to the original _Blueprint_ code (everything else has been left as-is).
+
+<1> The old attribute `headerName` is now `name`.
+<2> The below directive is no longer needed and has been removed:
++
+----
+<to uri="direct:json2xml"/>
+----
++
+NOTE: _Camel Quarkus_ can use out-of-box JSON to XML functionality from XSLT 3.0 and XPATH 3.0.
+<3> The following conversion has been added:
++
+----
+<convertBodyTo type="String"/>
+----
++
+NOTE: Converting the response to a String allows the process to read the payload multiple times (buffered responses can only be read once).
+
+<4> The attribute `propertyName` as now `name`
+======
+
+.Click here for reveal the original Blueprint definition.
+[%collapsible]
+======
+----
+<route id="call-system1">
+    <from uri="direct:call-system1"/>
+
+    <log message="calling Backend1 with: ${body}"/>
+
+    <!-- CALL to BACKEND -->
+    <removeHeaders pattern="*"/>
+    <setHeader headerName="content-type">
+    <constant>application/json</constant>
+    </setHeader>
+    <to id="end1" uri="http:{{api.backend1.host}}{{api.backend1.path}}"/>
+
+    <!-- CONVERT JSON to XML (to transform later) -->
+    <to uri="direct:json2xml"/>
+
+    <!-- KEEP RESPONSE -->
+    <setProperty propertyName="subscriber-response-rest">
+    <simple>${body}</simple>
+    </setProperty>
+
+    <log message="Backend1 is: ${exchangeProperty.subscriber-response-rest}"/>
+</route>
+----
+======
+
+The highlights of the _Camel_ route you just have migrated are collected in the list below:
+
+. *Prepares and performs the call to the REST backend*.
+. *Keeps the response in a process variable (Exchange property)*.
+
+The sub-diagram shown below illustrates the implemented interaction:
+
+image::camel-callbackend1.png[align="center", width=30%]
+
+{empty} +
+
+Let's now rework the JUnit. +
+As a reminder, the following line was included earlier in the lab:
+----
+reconfigureEndpoints();
+----
+NOTE: This new line was added because the mechanism to load testing configuration in _Camel Quarkus_ is different than _Karaf_ base tests.
+
+It is time to include the necessary lines of code to reconfigure the call to point to the embedded REST server (test mock).
+
+Edit again the test unit in your _Camel Quarkus_ project:
+
+- *src/test/java/org/camel/example/ServiceTest.java*
+
+And follow the steps indicated below:
+
+. Find in your _Camel Quarkus_ project the region of code with the following declaration:
++
+----
+    private void reconfigureEndpoints() throws Exception {
+        
+        // COPY/PASTE HERE reconfiguration        
+    }
+----
+
+. Include the following code where it says `COPY/PASTE HERE ...`:
++
+[source,java,role="copypaste"]
+----
+        //helper variable <1>
+        String host = "http://localhost:{{quarkus.http.test-port}}";
+
+        //reconfigure REST endpoint <2>
+        AdviceWith.adviceWith(context, "call-system1", a -> {
+          a.weaveById("end1").replace().to(host+"{{api.backend1.path}}");
+        });
+
+        // COPY/PASTE HERE SOAP reconfiguration <3>
+----
++
+.Click here to reveal notes
+[%collapsible]
+======
+<1> The variable `host` is configured with `{{quarkus.http.test-port}}` which _Quarkus_ populates with a randomly allocated port for testing.
+<2> The `AdviceWith` directive ensures the random port is used when calling the REST mock server.
+<3> Leave this slot for later. +
+The SOAP reconfiguration will be included in this placeholder.
+======
++
+.Click here to reveal the original reconfiguration code
+[%collapsible]
+======
+The original code is _Karaf_ (_OSGI_) specific, and not valid for _Camel Quarkus_. It had a special support method to inject test specific values. 
+----
+    @Override
+    protected String setConfigAdminInitialConfiguration(final Properties props) {
+    	String restPort = Integer.toString(getRandomPort());
+    	String soapPort = Integer.toString(getRandomPort());
+        props.setProperty("rest.host",         "localhost");
+        props.setProperty("rest.port",         restPort);
+        props.setProperty("api.backend1.host", "localhost:"+restPort);
+        props.setProperty("api.backend1.path", "/unit/test/subscriber/details");
+        props.setProperty("api.backend2.host", "localhost:"+soapPort);
+        return "demo.medium";
+----
+======
+
+You have now completed the test unit checks and configurations to validate the integration with the REST endpoint.
+
+Rerun the test unit with:
+
+```bash
+./mvnw clean test
+```
+
+This time around your Junit should pass and the following message should show:
+----
+...
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  28.068 s
+[INFO] Finished at: 2023-12-05T16:54:28Z
+[INFO] ------------------------------------------------------------------------
+----
+
+So far, your Junit is succeeding to do the following checks:
+
+* The JUnit is successfully calling the exposed REST service `/camel/subscriber/details`
+* The main route calls the `call-system1` sub-route.
+* The `call-system1` route prepares and sends a REST request.
+* The REST mock server receives the JSON request.
+* The JUnit captures the backend JSON request and validates its payload.
+
+{empty} +

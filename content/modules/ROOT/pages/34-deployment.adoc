@@ -190,7 +190,7 @@ Delete the existing content.
 
 Paste the following YAML:
 
-[source,yaml,role="copypaste"]
+[source,yaml,role="copypaste",subs=attributes+]
 ----
 build:
  uri: 'http://gitea.gitea.svc.cluster.local:3000/{USER_ID}/workshop.git'
@@ -249,7 +249,7 @@ image::open-terminal.png[open-terminal,80%]
 
 From the terminal, enter the following command to test the deployment:
 
-[source,bash,role="copypaste"]
+[source,bash,role="copypaste",subs=attributes+]
 ----
 curl -X POST http://eap8.{USER_ID}-project.svc.cluster.local:8080/subscribers -H 'Content-Type: application/json' -d '{"id": 0}'
 ----

@@ -2,7 +2,7 @@
 
 Before we deploy our JBoss EAP 8.0 application on OpenShift, we need to deploy a PostgreSQL database.
 
-Access the OpenShift console by clicking on the following { CONSOLE_URL}[link^] 
+Access the OpenShift console by clicking on the following {CONSOLE_URL}[link^] 
 
 Login with the following credentials:
 
