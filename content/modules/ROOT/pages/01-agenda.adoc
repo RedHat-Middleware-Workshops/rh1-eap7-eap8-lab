@@ -8,8 +8,7 @@
 
 In these labs you will be guided through the following exercises
 
-* Migration of a JBoss EAP 7.4 application to JBoss EAP 8.0
-* Deployment of a JBoss EAP 8.0 application to OpenShift
-* Configuration of Red Hat Service Interconnect to connect a service running on an inhouse datacenter to OpenShift.
-* Migration of a Red Hat Fuse application to Camel Quarkus
-* Deployment of a Camel Quarkus application to OpenShift
+* Introduction
+* EAP 7.4 to EAP 8.0 Migration Lab
+* Red Hat Service Interconnect Lab
+* Red Hat Fuse to Camel Quarkus Lab
