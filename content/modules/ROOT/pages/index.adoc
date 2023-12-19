@@ -38,9 +38,7 @@ Users of Eclipse, IntelliJ IDEA or Visual Studio Code will see a familiar layout
 
 Throughout this workshop you will be running commands in the integrated terminal. 
 
-Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Terminal"
-
-image::open-terminal.png[open-terminal]
+include::partial$open-terminal.adoc[]
 
 === Configuring GIT
 

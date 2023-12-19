@@ -20,12 +20,10 @@
 
 ** xref:51-migrate-the-service.adoc[5.1 Migrate the service]
 
-** xref:52-unit-test-overview.adoc[5.2 Unit test overview]
+** xref:52-test-driven-migration.adoc[5.2 Test driven migration]
 
-** xref:53-test-driven-migration.adoc[5.3 Test driven migration]
+** xref:53-test-driven-soap-integration.adoc[5.3 Test driven soap integration]
 
-** xref:54-test-driven-soap-integration.adoc[5.4 Test driven soap integration]
+** xref:54-response-data-mapping.adoc[5.4 Response data mapping]
 
-** xref:55-response-data-mapping.adoc[5.5 Response data mapping]
-
-** xref:56-opensift-deployment.adoc[5.6 OpenShift deployment]
+** xref:55-openshift-deployment.adoc[5.5 OpenShift deployment]

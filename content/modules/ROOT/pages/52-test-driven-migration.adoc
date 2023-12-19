@@ -1,6 +1,41 @@
 
 == Test-driven migration 
 
+The code migration done so far simply enables the new _Camel Quarkus_ application to perform a minimal request/response interaction using the _OpenApi_ contract. It is still however pending to include all the business logic from our old _Fuse_ project.
+
+The code to migrate is not trivial. It's advisable to find a good strategy forward that helps making progress with confidence. The _Fuse_ project has a robust and well implemented Junit. Let's take advantage of it and start migrating the old Junit to its new version which will help validating the migration work.
+
+[NOTE]
+--
+- You may often find in other migration projects that unit testing is missing or not provided. Often unit testing is not embedded within the project and belongs to other organisational groups (i.e. testing teams).
+- In such situations, it is most recommended to include in the scope of the migration process the creation of Junit testing to improve the overall quality of the code and, thinking medium and long term, guarantee minimal maintenance costs.
+--
+
+Let's look at the unit test included in the _Fuse_ project and understand how effective the _Camel_ testing framework is to help us validate our implementation.
+
+The diagram below illustrates the strategy of the _Camel_ junit you will be migrating:
+
+image::test-unit.png[align="center", width=80%]
+
+In the picture above observe the following elements:
+
+- At the center you can see the main _Camel_ on _Quarkus_ project under test.
+- Left (client) and right (HTTP and SOAP backends) you can see the external agents intended to interact with the system.
+- The test unit diverts and simulates the interaction with clients and servers.
++
+--
+. It triggers the client request.
+. It captures the backend traffic and validates its data
+. It simulates the backend responses, both for REST and SOAP.
+. It waits for the system's final response to the client.
+. It validates the response and runs extra assertions.
+--
+
+In the sections that follow you will adopt a test-driven approach using the Junit described to continue migrating the _Fuse_ project.
+
+{empty} +
+
+
 We intend in this section to migrate the region of code that integrates with the REST endpoint.
 
 As hinted in the previous section, the plan is to adopt a test-driven approach, and start by migrating a portion of the _Fuse_ Junit that will help ensuring it meets the functional expectations.
