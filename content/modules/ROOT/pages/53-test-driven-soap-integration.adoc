@@ -124,7 +124,7 @@ Converts the JSON request into a SOAP request
 
 Open in _Camel Quarkus_ the file containing the _Camel_ definitions, located at:
 
-- *src/main/resources/routes/api-medium.xml*
+- *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/main/resources/routes/api-medium.xml*
 
 Find in your template the following definition (empty):
 ----
@@ -294,7 +294,7 @@ NOTE: Although XSLT 3.0 was supported in _Fuse_, the old _Saxon_ dependency vers
 
 Open in _Camel Quarkus_ the following XSLT definition:
 
-- *src/main/resources/xslt/request.xsl*
+- *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/main/resources/xslt/request.xsl*
 
 Replace the line `<!-- COPY/UPDATE mapping here -->` with the snippet below:
 
@@ -374,7 +374,7 @@ Before executing one more time the Junit to validate the latest migration change
 
 Edit again the test unit in your _Camel Quarkus_ project:
 
-- *src/test/java/org/camel/example/ServiceTest.java*
+- *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/test/java/org/camel/example/ServiceTest.java*
 
 And follow the steps indicated below:
 

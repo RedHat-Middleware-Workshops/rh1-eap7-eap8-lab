@@ -30,6 +30,8 @@ You typically start a _Camel on Quarkus_ project by creating a project skeleton.
 
 This lab however already includes a pre-generated skeleton you will use to complete the migration. It will accelerate the work and help minimise human factor mistakes during the migration exercises.
 
+NOTE: The pre-generated skeleton is located in `migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template`
+
 Inspect the list below for a summary of the files in the project you need to work on:
 
 . New resources:
@@ -60,7 +62,7 @@ The best place in a _Fuse_ project from where to start migrating code is from th
 
 All the _Blueprint_ definitions are located in the _Fuse_ project under the folder:
 
- - *src/main/resources/OSGI-INF/blueprint/*
+ - *migration-fuse-camel-quarkus/base/karaf/level2medium-soap/src/main/resources/OSGI-INF/blueprint/*
 
 {empty} +
 
@@ -85,7 +87,7 @@ In a _Quarkus_ project, all the configuration is located in the `application.pro
 
 Open the file in your _Camel Quarkus_ project:
 
-- *src/main/resources/application.properties*
+- *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/main/resources/application.properties*
 
 And follow the steps indicated below:
 
@@ -148,7 +150,7 @@ The equivalent XML bean for _Camel_ is shown below. Copy the properties from the
 
 Open the following file in your _Camel Quarkus_ project:
 
-- *src/main/resources/routes/api-medium.xml*
+- *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/main/resources/routes/api-medium.xml*
 
 And follow the instructions below:
 
@@ -206,7 +208,7 @@ For the migrated service in _Quarkus_, we discard the code blocks above and defi
 
 In your _Quarkus_ project you'll find the _OpenApi_ definition under the following location:
 
-- *src/main/resources/META-INF/openapi.json*
+- *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/main/resources/META-INF/openapi.json*
 
 NOTE: The _OpenApi_ definition provided was created with _Apicurio Studio_, a beautiful and intuitive design-time visual tool.
 
@@ -266,7 +268,7 @@ Let's migrate the main _Camel_ route that contains the end-to-end flow.
 
 Open in _Camel Quarkus_ the file containing the _Camel_ definitions, located at:
 
-- *src/main/resources/routes/api-medium.xml*
+- *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/main/resources/routes/api-medium.xml*
 +
 NOTE: The file is a skeleton with empty route definitions and dummy values. You will complete its definition in stages as you make progress along the lab. 
 

@@ -15,7 +15,7 @@ Loyal to our test-driven approach, we start by updating the test unit to define 
 
 From your editor, open again the test unit _Java_ class:
 
-- *src/test/java/org/camel/example/ServiceTest.java*
+- *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/test/java/org/camel/example/ServiceTest.java*
 
 Now follow the steps indicated below:
 
@@ -150,7 +150,7 @@ There are 2 pending source files to update:
 
 Open in _Camel Quarkus_ the file containing the _Camel_ definitions, located at:
 
-- *src/main/resources/routes/api-medium.xml*
+- *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/main/resources/routes/api-medium.xml*
 
 Find in your template the following (empty) definition:
 ----
@@ -252,7 +252,7 @@ And the last file to migrate is the `response.xsl` where the data transformation
 
 Open in _Camel Quarkus_ the following XSLT definition:
 
-- *src/main/resources/xslt/response.xsl*
+- *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/main/resources/xslt/response.xsl*
 
 Find in the XSLT the following region of code:
 

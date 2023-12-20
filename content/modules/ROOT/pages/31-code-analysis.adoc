@@ -16,7 +16,7 @@ Configure the Windup VS-Code extension as follows
 
 image::windup-config.png[windup-config]
 
-* Set code location to `/projects/rh1-workshop-eap-app`
+* Set code location to `/projects/rh1-lab-eap-camel-quarkus/rh1-workshop-eap-app/app`
 * Ensure "eap8 and openjdk17" are selected under "--target" 
 
 To perform the code analysis, click on the start button as shown below

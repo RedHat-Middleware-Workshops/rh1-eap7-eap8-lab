@@ -61,7 +61,7 @@ We've created a skeleton to accelerate the migration of the test unit. You only 
 
 Open the following Java file from your _Camel Quarkus_ project:
 
-- *src/test/java/org/camel/example/ServiceTest.java*
+- *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/test/java/org/camel/example/ServiceTest.java*
 
 Now follow the steps described below:
 
@@ -318,7 +318,7 @@ In summary, the route prepares and sends a JSON request to the backend and obtai
 
 Open in _Camel Quarkus_ the file containing the _Camel_ definitions, located at:
 
-- *src/main/resources/routes/api-medium.xml*
+- *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/main/resources/routes/api-medium.xml*
 
 Find in your template the following definition (empty):
 ----
@@ -428,7 +428,7 @@ It is time to include the necessary lines of code to reconfigure the call to poi
 
 Edit again the test unit in your _Camel Quarkus_ project:
 
-- *src/test/java/org/camel/example/ServiceTest.java*
+- *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/test/java/org/camel/example/ServiceTest.java*
 
 And follow the steps indicated below:
 
