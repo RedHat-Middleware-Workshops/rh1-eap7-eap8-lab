@@ -41,9 +41,23 @@ http://medium.{USER_ID}-project.svc.cluster.local:8080/camel/subscriber/details
 
 You should see a response similar to:
 
-[source,sh]
+[source,json]
 ----
-
+{
+  "client": {
+    "fullName": "Some One",
+    "addressLine1": "1 Some Street",
+    "addressLine2": "Somewhere SOME C0D3",
+    "addressLine3": "UK"
+  },
+  "subscriptions": {
+    "packages": [],
+    "period": {
+      "end": "01-01-2024",
+      "start": "01-01-2023"
+    }
+  }
+}
 
 ----
 

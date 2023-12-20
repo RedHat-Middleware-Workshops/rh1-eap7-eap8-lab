@@ -1,0 +1,9 @@
+== Workshop summary
+
+In this workshop we've completed the migration of a JBoss EAP 7.4 application to JBoss EAP 8.0.  We've then deployed this application on OpenShift.
+We've use Red Hat Service Interconnect to create a connection between a legacy SOAP service running on a virtual machine and an OpenShift namespace.
+Finally, we've taken a Red Hat Fuse application and migrated this to Red Hat build of Apache Camel for Quarkus. This application has also been migrated to OpenShift.
+
+The resulting architecture should resemble our desired end-state:
+
+image::end-architecture.png[end architecture]

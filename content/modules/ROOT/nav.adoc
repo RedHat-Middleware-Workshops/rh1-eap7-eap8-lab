@@ -27,3 +27,7 @@
 ** xref:54-response-data-mapping.adoc[5.4 Response data mapping]
 
 ** xref:55-openshift-deployment.adoc[5.5 OpenShift deployment]
+
+** xref:56-summary.adoc[5.6 Summary]
+
+* xref:06-summary.adoc[6.0 Workshop Summary]

@@ -163,7 +163,7 @@ Your changes will be pushed to gitea.
 
 We can now deploy our JBoss EAP 8.0 application with Helm.
 
-Access the OpenShift console by clicking on the following {CONSOLE_URL}[link^] 
+Access the OpenShift console by clicking on the following {Copenshift_cluster_console_url}[link^] 
 
 Login with the following credentials:
 
@@ -243,9 +243,7 @@ image::eap8-on-ocp.png[eap8-on-ocp,80%]
 
 The application we've deployed can be tested using curl from the terminal in OpenShift Dev Spaces
 
-NOTE: Access the terminal in dev spaces by clicking on "Menu" -> "Terminal" -> "New Terminal"
-
-image::open-terminal.png[open-terminal,80%]
+include::partial$open-terminal.adoc[]
 
 From the terminal, enter the following command to test the deployment:
 
@@ -259,7 +257,6 @@ You should see a response similar to:
 [source,bash]
 ----
 {"subscriptions":{"packages":[{"amount":16,"id":"i-001"},{"amount":32,"id":"i-002"},{"amount":200,"id":"i-018"}],"period":{"end":"01-01-2024","start":"01-01-2023"}}}
-
 ----
 
 We've now completed the migration of our JBoss EAP 8.0 application to OpenShift.

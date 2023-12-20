@@ -1,0 +1,4 @@
+== Summary
+
+In this lab we've used a test driven approach to migrate an app which depends on Red Hat Fuse with Karaf to Red Hat build of Apache Camel for Quarkus.
+Once the application was successfully migrated, we then deployed the application to Red Hat OpenShift.
