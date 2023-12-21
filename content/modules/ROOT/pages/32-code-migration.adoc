@@ -123,6 +123,8 @@ Finally, we need to change
 <version.server.bom>7.4.0.GA</version.server.bom>
 ----
 to
+
+//TODO Change when EAP 8.0 is GA
 [source,xml,role="copypaste"]
 ----
 <version.server.bom>8.0.0.Beta-redhat-00004</version.server.bom>

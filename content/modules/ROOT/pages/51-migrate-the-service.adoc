@@ -357,9 +357,15 @@ You now have covered some good ground, let's make sure the work you've done so f
 
 Run the following command from your terminal:
 
-```bash
+[source,sh,role="copypaste"]
+----
+cd /projects/rh1-lab-eap-camel-quarkus/migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template
+----
+
+[source,sh,role="copypaste"]
+----
 ./mvnw clean compile quarkus:dev
-```
+----
 
 _Quarkus_ provides an out-of-the-box browsable UI to test your APIs. You can display the _Swagger_ UI by:
 

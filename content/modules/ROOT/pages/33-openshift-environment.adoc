@@ -17,7 +17,7 @@ Within this project, add a PostgreSQL database by Clicking on "+Add" and selecti
 
 From the Developer catalog, select the "PostgreSQL" template and fill out the form details as shown below.
 
-image::postgresql-template.png[postgresql-template,80%]
+image::postgresql-template.png[postgresql-template]
 [source,sh]
 ----
 * User name: postgresUser

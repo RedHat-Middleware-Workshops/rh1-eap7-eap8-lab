@@ -178,7 +178,7 @@ Select Helm Chart from the developer catalog.
 
 Enter eap in the Filter by keyword field as shown below:
 
-image::helm-charts.png[migration,80%]
+image::helm-charts.png[migration]
 
 Select the JBoss EAP 8 Helm chart from the catalog.
 
@@ -227,7 +227,7 @@ It will take a while to build and deploy the application. To monitor the progres
 
 Go to Builds. 
 
-image::eap8-builds.png[migration,80%]
+image::eap8-builds.png[migration]
 
 Select `eap8-build-artifacts`.
 
@@ -237,7 +237,7 @@ Click on `eap8-build-artifacts-1` to view the logs of the active build.
 
 Once the builds are complete, you will be able to click the Open URL icon of the eap8 deployment to view the running application.
 
-image::eap8-on-ocp.png[eap8-on-ocp,80%]
+image::eap8-on-ocp.png[eap8-on-ocp]
 
 == Testing the deployment
 
