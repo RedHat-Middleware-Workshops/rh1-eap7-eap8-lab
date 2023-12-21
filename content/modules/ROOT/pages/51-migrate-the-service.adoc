@@ -412,6 +412,9 @@ If successful, you should get a dummy JSON response similar to:
 }
 ----
 
+IMPORTANT: Switch back to the Terminal tab running the quarkus application and press CTRL+C to quit the application
+
+
 [TIP]
 --
 The response you're obtaining is from a dummy sample payload _Camel_ loads from the following processing action in the `mapResponse` Camel route:
@@ -419,6 +422,7 @@ The response you're obtaining is from a dummy sample payload _Camel_ loads from 
 <to uri="language:constant:resource:classpath:/data/dummy.json"/>
 ----
 --
+
 
 
 {empty} +

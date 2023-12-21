@@ -110,9 +110,10 @@ The new assertions in the JUnit are introducing checks to validate the JSON data
 
 If you run the unit test again with:
 
-```bash
+[source,sh,role="copypaste"]
+----
 ./mvnw clean test
-```
+----
 
 As expected, the test unit should fail with the following error message:
 ----
@@ -172,6 +173,8 @@ And follow the instructions below:
       <!-- REMOVE DUMMY RESPONSE -->
       <to uri="language:constant:resource:classpath:/data/dummy.json"/>
 ----
+
+IMPORTANT: Make sure you also replace the section: <to uri="language:constant:resource:classpath:/data/dummy.json"/>
 
 . And replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
 
@@ -396,9 +399,10 @@ Ok, all the source files from _Fuse_ have now been migrated to _Camel Quarkus_. 
 
 Rerun the test unit with:
 
-```bash
+[source,sh,role="copypaste"]
+----
 ./mvnw clean test
-```
+----
 
 Given the dummy injected response has been replaced with the actual data mapping, the resulting execution should show:
 ----

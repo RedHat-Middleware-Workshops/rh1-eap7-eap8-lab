@@ -267,9 +267,10 @@ The SOAP assertions will be added later in the lab.
 
 You have now a minimal JUnit. Run it with the command below:
 
-```bash
+[source,java,role="copypaste"]
+----
 ./mvnw clean test
-```
+----
 
 Not surprisingly you should see your test unit fail with the following error messages:
 ----
