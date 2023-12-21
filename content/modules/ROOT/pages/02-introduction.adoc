@@ -15,7 +15,7 @@ The existing architecture is as follows:
 
 image::start-architecture.png[starting architecture]
 
-As you can see from the existing architecture, all of these applications are deployed on a VM on an internal subnet.
+As you can see from the existing architecture, all of these applications are deployed on a virtual machine on an internal subnet.
 
 The purpose of this lab is to move the EAP and Fuse applications to OpenShift, leaving the SOAP service on the virtual machine. In addition to moving the EAP and Fuse applications to OpenShift we will also be migrating the EAP 7.4 application to EAP 8.0, and the Red Hat Fuse application to Camel Quarkus.
 Additionally, to facilitate the SOAP service remaining on the virtual machine, we will use Red Hat Service Interconnect to create a connection from the OpenShift namespace to the SOAP service on VM.

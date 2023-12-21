@@ -8,7 +8,6 @@
 
 In these labs you will be guided through the following exercises
 
-* Introduction
 * EAP 7.4 to EAP 8.0 Migration Lab
 * Red Hat Service Interconnect Lab
 * Red Hat Fuse to Camel Quarkus Lab

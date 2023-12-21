@@ -52,7 +52,7 @@ First step is to add the Red Hat plugin repositories for GA and early access sof
     </pluginRepositories>
 ----
 
-Also in the pom.xml file and add the following before the closing tag replacing the existing <profiles> block:
+Also in the pom.xml file add the following before the closing tag replacing the existing <profiles> block:
 
 [source,xml,role="copypaste"]
 ----
@@ -117,8 +117,8 @@ If we examine the pom.xml snippet, we can see the inclusion of three feature pac
 * https://github.com/jbossas/eap-cloud-galleon-pack/blob/main/doc/index.md[wildfly-ee-galleon-pack^]: The wildfly-ee-galleon-pack contains the features required to build an instance of JBoss EAP. This feature pack contains several layers (e.g., jaxrs-server and cloud-server).
 * https://github.com/jbossas/eap-cloud-galleon-pack/blob/main/doc/index.md[eap-cloud-galleon-pack^]: The org.jboss.eap.cloud:eap-cloud-galleon-pack Galleon feature-pack provisions a set of additional features allowing you to configure an
 EAP server to run on the cloud. The main features are as follows:
-** Server startup scripts: When starting an EAP server that was provisioned by the cloud feature-pack, a set of bash scripts are executed in order to adjust the server configuration. These scripts configure a range of server functions such as clustering, security, logging, messaging, tracing, and config management. Read more on this.
-** Adjustment of WildFly Galleon layers to tune for deployment on OpenShift, for example, disabling the management console. Read more on this.
+** Server startup scripts: When starting an EAP server that was provisioned by the cloud feature-pack, a set of bash scripts are executed in order to adjust the server configuration. These scripts configure a range of server functions such as clustering, security, logging, messaging, tracing, and config management. https://github.com/jbossas/eap-cloud-galleon-pack/blob/main/doc/launch.md[Read more on this].
+** Adjustment of WildFly Galleon layers to tune for deployment on OpenShift, for example, disabling the management console. https://github.com/jbossas/eap-cloud-galleon-pack/blob/main/doc/layers.md[Read more on this].
 ** Automatic provisioning of the health subsystem allows for server state monitoring and provides liveness and readiness probes.
 ** Automatic routing of server logs to the console to ensure they are visible in the pod logs in the OpenShift console.
 * https://github.com/jbossas/eap-datasources-galleon-pack[eap-datasources-galleon-pack^]: This feature pack for JBoss EAP and JBoss EAP Expansion Pack provides JDBC drivers and data sources for the following databases:
@@ -126,7 +126,7 @@ EAP server to run on the cloud. The main features are as follows:
 ** Oracle
 ** PostgreSQL
 
-We can also see the inclusion of four layers in our pom.xml file snippet:
+We can also see the inclusion of two layers in our pom.xml file snippet:
 
 * cloud-server: The cloud server layer is an extension of the jaxrs-server and datasources-web-server layers providing cloud-native functionality such as observability and jms-activemq.
 * postgresql-datasource: Adds support for postgresql database drivers, requires the eap-datasources-galleon-pack feature pack.
@@ -135,7 +135,7 @@ The addition of datasources feature pack and postgresql-datasource layer will in
 
 == Deploy the application to OpenShift
 
-We need to push our code changes to our gitea repository.
+To deploy our application to OpenShift we need to push our code changes to our gitea repository.
 
 Click on the "Source Control" icon in the IDE, you should see the following:
 
@@ -163,7 +163,7 @@ Your changes will be pushed to gitea.
 
 We can now deploy our JBoss EAP 8.0 application with Helm.
 
-Access the OpenShift console by clicking on the following {Copenshift_cluster_console_url}[link^] 
+Access the OpenShift console by clicking on the following {openshift_cluster_console_url}[link^] 
 
 Login with the following credentials:
 

@@ -102,8 +102,8 @@ And follow the steps indicated below:
 [source,java,role="copypaste"]
 ----
 # REST Backend configuration
-      api.backend1.host = end1:8080
-      api.backend1.path = /camel/subscriber/details
+      api.backend1.host = eap8:8080
+      api.backend1.path = /subscribers
 # JUnits and Local testing configuration
  %dev.api.backend1.host = localhost:10000
 %test.api.backend1.path = /unit/test/subscriber/details

@@ -31,7 +31,7 @@ Switch to the Topology view, you should see the PostgeSQL database deployed and 
 
 image::postgres-running.png[postgresql-running]
 
-While this is happening we can go ahead and create a config map containing runtime variables for out EAP application.  
+While this is happening we can go ahead and create a config map containing runtime variables for our EAP application.  
 
 This config map contains non-sensitive information relating to the PostgreSQL connection connection such as the database service host and database name.  Sensitive information such as username / password will be pulled from the secrets created when these services where deployed.
 
@@ -49,3 +49,5 @@ data:
   POSTGRESQL_DATASOURCE: postgresql
   POSTGRESQL_SERVICE_HOST: postgresql
 ----
+
+We can now move on to the deployment of our JBoss EAP 8.0 application to OpenShift.
