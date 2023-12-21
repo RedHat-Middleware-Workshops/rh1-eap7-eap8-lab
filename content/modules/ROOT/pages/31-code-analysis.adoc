@@ -1,12 +1,14 @@
 == Code Analysis
 
-JBoss EAP 8.0 requires code changes to applications written for JBoss EAP 7.4. Due to the move from Jakarta 8 to Jakarta 10 (e.g., converting from the “javax” namespace to “jakarta” namespace). These changes are documented in this https://access.redhat.com/articles/6980265[article, window="_blank"]. 
+JBoss EAP 8.0 requires code changes to applications written for JBoss EAP 7.4. Due to the move from Jakarta 8 to Jakarta 10 (e.g. converting from the “javax” namespace to “jakarta” namespace). These changes are documented in this https://access.redhat.com/articles/6980265[article, window="_blank"]. 
 
 == Using the Windup VS Code extension
 
 To perform the required code changes, we're going to use the Windup VS Code extension.  
 
 CLick on the Windup icon on the left hand panel.
+
+IMPORTANT: If you do not see the Windup icon on the left hand panel, refresh your browser.
 
 image::windup-icon.png[windup-icon]
 

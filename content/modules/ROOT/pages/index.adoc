@@ -2,7 +2,7 @@
 
 You will be using Red Hat OpenShift Dev Spaces. **Changes to files are auto-saved every few seconds**, so you don't need to explicitly save changes.
 
-To get started, {DS_URL}[access the Red Hat OpenShift Dev Spaces^] you will be presented with an option to login with your OpenShift credentials
+To get started, {devspaces_url}[access the Red Hat OpenShift Dev Spaces^] you will be presented with an option to login with your OpenShift credentials
 
 image::openshift-login.png[openshift-login]
 
@@ -19,8 +19,11 @@ You will be promted to Authorize access to the devspaces client to access your a
 
 Once you log in, you’ll be placed on your personal dashboard. 
 
+You should see a workspace called "eap-camel-lab"
 
 image::devspaces-dashboard.png[devspaces-dashboard]
+
+Click on this workspace on the left-hand panel to open the workspace.
 
 After a minute or two, you’ll be placed in the workspace.  
 
