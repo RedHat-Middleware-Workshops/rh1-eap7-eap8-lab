@@ -367,31 +367,48 @@ cd /projects/rh1-lab-eap-camel-quarkus/migration-fuse-camel-quarkus/migration/ca
 ./mvnw clean compile quarkus:dev
 ----
 
-_Quarkus_ provides an out-of-the-box browsable UI to test your APIs. You can display the _Swagger_ UI by:
+Once the Quarkus application is running, open another Terminal tab (by clicking on the "+" icon).
 
- 1. Entering its URL in your browser's address bar
- 2. via the dev UI (Press `D`, then click the SmallRye OpenApi tile) 
+Run the following command:
 
-To open the _Swagger_ UI by opening the URL in a browser, enter:
 
- - http://localhost:8080/q/camel/openapi.json
+[source,sh,role="copypaste"]
+----
+curl -H "content-type: application/json" -d '{"id":"123"}' http://localhost:8080/camel/subscriber/details
+----
 
-Click on the service to try, and hit the `Try it out` button, scroll down and then click `Execute`.
-
-Or, from your running _Camel Quarkus_ terminal, press `[d]`, it will open the dev UI in your default browser. Find the SmallRye tile, and click **Swagger UI**.
-
-image::test-1.png[align="center", width=100%]
 
 
 If successful, you should get a dummy JSON response similar to:
 
-----
+[source,json]
 {
   "client": {
     "fullName": "dummy",
     "addressLine1": "dummy",
     "addressLine2": "dummy",
-    "...
+    "addressLine3": "dummy"
+  },
+  "subscriptions": {
+    "period": {
+      "start": "dummy",
+      "end": "dummy"
+    },
+    "packages": [
+      {
+        "id": "dummy",
+        "amount": 16
+      },
+      {
+        "id": "dummy",
+        "amount": 32
+      },
+      {
+        "id": "dummy",
+        "amount": 200
+      }
+    ]
+  }
 }
 ----
 
