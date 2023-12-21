@@ -109,7 +109,7 @@ And follow the steps indicated below:
 %test.api.backend1.path = /unit/test/subscriber/details
 
 # SOAP Backend configuration
-      api.backend2.host = end2:8080
+      api.backend2.host = soap-api:8080
 # JUnits and Local testing configuration
  %dev.api.backend2.host = localhost:9000
 %test.api.backend2.host = localhost:{{quarkus.http.test-port}}

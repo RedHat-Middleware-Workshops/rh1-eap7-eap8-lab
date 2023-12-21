@@ -193,9 +193,9 @@ Paste the following YAML:
 [source,yaml,role="copypaste",subs=attributes+]
 ----
 build:
- uri: 'http://gitea.gitea.svc.cluster.local:3000/{USER_ID}/workshop.git'
+ uri: 'http://gitea.gitea.svc.cluster.local:3000/{USER_ID}/rh1-lab-eap-camel-quarkus.git'
  ref: main
- contextDir: app
+ contextDir: rh1-workshop-eap-app/app
  env:
    - name: POSTGRESQL_DRIVER_VERSION
      value: '42.6.0'
