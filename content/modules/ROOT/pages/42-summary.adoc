@@ -1,0 +1,1 @@
+Congratulations! You've now built a secure service network between two different environments and made the SOAP API accessible over the secure network using Red Hat Service Interconnect. 

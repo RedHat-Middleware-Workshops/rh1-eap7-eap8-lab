@@ -16,6 +16,7 @@
 
 * xref:04-rhsi-introduction.adoc[4. Red Hat Service Interconnect Lab]
 ** xref:41-rhsi-instructions.adoc[4.1 Red Hat Service Interconnect Lab Instructions]
+** xref:42-summary.adoc[4.2 Summary]
 
 * xref:05-fuse-to-camelq-introduction.adoc[5. Red Hat Fuse to Camel Quarkus Lab]
 
