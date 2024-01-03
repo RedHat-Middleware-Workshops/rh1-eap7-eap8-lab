@@ -91,7 +91,7 @@ image::rhsi-terminal.png[rhsi-terminal]
 +
 [source,sh,role="copypaste",subs=attributes+]
 ----
-ssh -o ServerAliveInterval=60 {bastion_public_hostname}
+ssh -o ServerAliveInterval=60 {bastion_ssh_user_name}@{bastion_public_hostname}
 ----
 
 . Enter the following password to login
@@ -100,7 +100,7 @@ ssh -o ServerAliveInterval=60 {bastion_public_hostname}
 
 . If the login has been successful you should be logged in as `lab-user` on the VM
 +
-image::rhsi-vm-terminal[rhsi-vm-terminal]
+image::rhsi-vm-terminal.png[rhsi-vm-terminal]
 
 
 ## Deployment overview
@@ -136,6 +136,7 @@ vi mysite.yaml
 ----
 
 . Paste the below contents in `mysite.yaml` and save it using the buttons esc followed by :wq and hit enter to save the file
++
 [source,yaml,role="copypaste"]
 ----
 apiVersion: v1
@@ -143,7 +144,7 @@ kind: ConfigMap
 metadata:
   name: skupper-site
 data:
-  name: my-site
+  name: ocp
   console: "true"
   console-user: "admin"
   console-password: "openshift"
@@ -159,9 +160,11 @@ oc apply -f mysite.yaml
 ----
 
 . Navigate to the Red Hat Service Interconnect console to verify that OCP cluster appears in the topology. Once the connectivity is established we should be able to see the VM in the topology view too
++
 [source,sh,role="copypaste",subs=attributes+]
 ----
-https://skupper-{USER_ID}-project.{openshiftdomain}/#/topology
+https://skupper-{openshift_cluster_user_name}-project.{openshift_cluster_ingress_domain
+}/#/topology
 ----
 
 . Navigate to the Red Hat Service Interconnect console to verify that OpenShift cluster (OCP) appears in the topology. Once the connectivity is established we should be able to see the VM in the topology view too. To get the URL of the console copy the output of the below command and paste in the browser
@@ -188,6 +191,13 @@ We'll be using the CLI to initialize Red Hat Service Interconnect \on the VM.
 . Go to the terminal on the devspaces where you are logged in to the VM. The Red Hat Service Interconnect cli is already available on the VM.
 +
 image::rhsi-vm-terminal.png[rhsi-vm-terminal]
+
+. Install the Red Hat Service Interconnect CLI
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+curl https://skupper.io/install.sh | sh
+----
 
 . Switch the skupper cli podman site mode as we will be using podman to run our skupper containers
 +
@@ -297,7 +307,16 @@ image::rhsi-vm-terminal.png[rhsi-vm-terminal]
 vi secret.token
 ----
 
-. Paste the token in this file and save it using the buttons esc followed by :wq and hit enter to save the file
+. Paste the token you saved earlier, in this file and save it using the buttons esc followed by :wq and hit enter to save the file. 
++
+[NOTE]
+====
+If you haven't saved the token earlier, you can also copy the contents of the `token.yaml` file as indicated below. Select all and copy the token
+====
++
+image::rhsi-token-file.png[rhsi-token-file]
+
+
 
 . Create a link on the VM using the token
 +
@@ -319,6 +338,12 @@ Check the status of the link using 'skupper link status'.
 image::rhs-ocp-vm-topology.png[rhs-ocp-vm-topology]
 +
 This confirms that the link has now been established
++
+[NOTE]
+====
+The circles depicting the environments might overlap each other sometimes and hence might not be visible. If that's the case, click on the circle that's visible and drag it to the side ensure proper visibility.
+====
+
 
 . Finally, you need to expose the soap service running on the VM over the link. This will allow the soap service to be accessed from the openshift cluster as if it was a local service. 
 +
@@ -331,7 +356,13 @@ skupper expose host host.containers.internal --address soap-api --port 8080
 +
 image::rhsi-ocp-terminal.png[rhsi-ocp-terminal]
 
-. Create a yaml file with the name `skupper-service.yaml` and 
+. Create a yaml file with the name `skupper-service.yaml` 
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+vi skupper-service.yaml
+----
+
 
 . Paste the below contents in `skupper-service.yaml` and save it using the buttons esc followed by :wq and hit enter to save the file
 +
@@ -399,7 +430,7 @@ curl -s -d @src/main/resources/request.xml http://soap-api.user1-project.svc.clu
 
 . If our Service Interconnect network was setup correctly you should be able to see a response as shown below
 +
-[source,xml]
+[source,xml,role="copypaste",subs=attributes+]
 ----
 <?xml version="1.0"?>
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
