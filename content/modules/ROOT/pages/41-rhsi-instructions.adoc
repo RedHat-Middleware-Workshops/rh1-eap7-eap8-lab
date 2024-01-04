@@ -2,7 +2,7 @@
 
 You will be using Red Hat OpenShift Dev Spaces. **Changes to files are auto-saved every few seconds**, so you don't need to explicitly save changes.
 
-. To get started, link:{devworkspaces_url}[access the Red Hat OpenShift Dev Spaces] you will be presented with an option to login with your OpenShift credentials
+. To get started, link:{devworkspaces_url}[access the Red Hat OpenShift Dev Spaces^] you will be presented with an option to login with your OpenShift credentials
 +
 image::openshift-login.png[openshift-login]
 
@@ -180,8 +180,7 @@ oc apply -f mysite.yaml
 +
 [source,sh,role="copypaste",subs=attributes+]
 ----
-https://skupper-{openshift_cluster_user_name}-project.{openshift_cluster_ingress_domain
-}/#/topology
+https://skupper-{openshift_cluster_user_name}-project.{openshift_cluster_ingress_domain}/#/topology
 ----
 
 . Navigate to the Red Hat Service Interconnect console to verify that OpenShift cluster (OCP) appears in the topology. Once the connectivity is established we should be able to see the VM in the topology view too. To get the URL of the console copy the output of the below command and paste in the browser
@@ -256,9 +255,9 @@ skupper status
 
 . Output
 +
-[source,sh,role="copypaste",subs=attributes+]
+[source,sh,subs=attributes+]
 ----
-Skupper is enabled for "lab-user" with site name "bastion.p9dj5.internal-lab-user-d196f". It is not connected to any other sites. It has no exposed services.
+Skupper is enabled for "lab-user" with site name "bastion.{guid}.internal-lab-user-{guid}". It is not connected to any other sites. It has no exposed services.
 ----
 +
 This confirms that we have not yet established the connection between the sites.
@@ -344,9 +343,9 @@ skupper link create secret.token --name ocp-to-vm
 
 . Output
 +
-[source,sh,role="copypaste",subs=attributes+]
+[source,sh,subs=attributes+]
 ----
-Site configured to link to skupper-inter-router-user1-project.apps.cluster-p9dj5.p9dj5.sandbox211.opentlc.com:443 (name=ocp-to-vm)
+Site configured to link to skupper-inter-router-{USER_ID}-project.{openshift_cluster_ingress_domain}:443 (name=ocp-to-vm)
 Check the status of the link using 'skupper link status'.
 ----
 
@@ -447,7 +446,7 @@ curl -s -d @src/main/resources/request.xml http://soap-api.user1-project.svc.clu
 
 . If our Service Interconnect network was setup correctly you should be able to see a response as shown below
 +
-[source,xml,role="copypaste",subs=attributes+]
+[source,xml,subs=attributes+]
 ----
 <?xml version="1.0"?>
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">

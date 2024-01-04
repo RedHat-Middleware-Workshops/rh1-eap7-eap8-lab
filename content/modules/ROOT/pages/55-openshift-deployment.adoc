@@ -35,7 +35,7 @@ From your dev spaces terminal run the following command to test the Camel Quarku
 ----
 curl \
 -H "content-type: application/json" \
--d '{"id":"123"}' \
+-d '{"id":"1"}' \
 http://medium.{USER_ID}-project.svc.cluster.local:8080/camel/subscriber/details
 ----
 
@@ -51,7 +51,20 @@ You should see a response similar to:
     "addressLine3": "UK"
   },
   "subscriptions": {
-    "packages": [],
+    "packages": [
+      {
+        "amount": 27,
+        "id": "i-003"
+      },
+      {
+        "amount": 41,
+        "id": "i-019"
+      },
+      {
+        "amount": 90,
+        "id": "i-006"
+      }
+    ],
     "period": {
       "end": "01-01-2024",
       "start": "01-01-2023"
