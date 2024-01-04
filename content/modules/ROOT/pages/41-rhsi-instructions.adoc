@@ -204,7 +204,7 @@ image::rhsi-ocp-topology.png[rhsi-ocp-topology]
 ## Initialize Red Hat Service Interconnect in the RHEL VM
 We'll be using the CLI to initialize Red Hat Service Interconnect \on the VM.  
 
-. Go to the terminal on the devspaces where you are logged in to the VM. The Red Hat Service Interconnect cli is already available on the VM.
+. Go to the terminal on the devspaces where you are logged in to the VM.
 +
 image::rhsi-vm-terminal.png[rhsi-vm-terminal]
 
