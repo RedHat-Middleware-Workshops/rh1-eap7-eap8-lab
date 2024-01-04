@@ -2,7 +2,7 @@
 
 You will be using Red Hat OpenShift Dev Spaces. **Changes to files are auto-saved every few seconds**, so you don't need to explicitly save changes.
 
-. To get started, {DS_URL}[access the Red Hat OpenShift Dev Spaces^] you will be presented with an option to login with your OpenShift credentials
+. To get started, link:{devworkspaces_url}[access the Red Hat OpenShift Dev Spaces] you will be presented with an option to login with your OpenShift credentials
 +
 image::openshift-login.png[openshift-login]
 
@@ -104,12 +104,27 @@ image::rhsi-vm-terminal.png[rhsi-vm-terminal]
 
 
 ## Deployment overview
-A legacy soap API has been deployed on the VM
+A legacy soap API has been deployed on the VM. The API returns a response as shown below
+----
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <ns2:SubscriberResponse xmlns:ns2="http://www.example.org/s1/">
+      <Name>Some</Name>
+      <Surname>One</Surname>
+      <Address>
+        <Number>1</Number>
+        <Street>Some Street</Street>
+        <City>Somewhere</City>
+        <PostCode>SOME C0D3</PostCode>
+        <Country>UK</Country>
+      </Address>
+    </ns2:SubscriberResponse>
+  </soap:Body>
+</soap:Envelope>
+----
 
-
-
-
-
+The goal of our exercise it to make this Legacy SOAP API accessible from the OpenShift cluster, without exposing it to the public internet and not using any complex VPNs or firewalls. We will do this by establishing a Layer 7 connectivity between the legacy SOAP service running on a virtual machine and an OpenShift namespace using *Red Hat Service Interconnect*
 
 There are multiple ways to setup layer 7 connectivity using Red Hat Service interconnect. You use either use the CLI or the OpenShift Operator. In this section we'll be using the operator to setup connectivity on the OpenShift end and the CLI to setup the connectivity on the VM side.
 
@@ -449,3 +464,5 @@ curl -s -d @src/main/resources/request.xml http://soap-api.user1-project.svc.clu
   </soap:Body>
 </soap:Envelope>
 ----
+
+Congratulations! You built a secure service network between services on two different environments and allowed applications to connect and communicate over the secure network using Red Hat Service Interconnect. 
