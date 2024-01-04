@@ -43,6 +43,8 @@ Users of Eclipse, IntelliJ IDEA or Visual Studio Code will see a familiar layout
 +
 image::open-terminal.png[open-terminal]
 
+include::partial$create-project.adoc[]
+
 . *Switch to the project called "{USER_ID}-project"*
 +
 [source,sh,role="copypaste",subs=attributes+]
@@ -54,7 +56,7 @@ oc project {USER_ID}-project
 +
 [source,sh,role="copypaste",subs=attributes+]
 ----
-Using project "user1-project" on server
+Using project "{USER_ID}-project" on server
 ----
 
 . Since we'll be using multiple terminal sessions in this exercise (one for OpenShift and other for the VM). Let's rename this terminal tab to avoid confusion. Click on the `bash` icon as show below and select `Rename`option

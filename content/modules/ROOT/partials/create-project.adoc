@@ -1,0 +1,15 @@
+IMPORTANT: Throughout this lab we will be using a project called {USER_ID}-project.  You will need to create this project if you have not already done so.
+
+If you have not already created this project you can do so now by entering the following from the terminal:
+
+[source,sh,role="copypaste",subs=attributes+]
+----
+oc new-project {USER_ID}-project
+----
+
+You will see a response similar to
+
+[source,sh,subs=attributes+]
+----
+
+----

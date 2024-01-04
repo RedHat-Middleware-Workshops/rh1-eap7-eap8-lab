@@ -43,6 +43,8 @@ Throughout this workshop you will be running commands in the integrated terminal
 
 include::partial$open-terminal.adoc[]
 
+include::partial$create-project.adoc[]
+
 === Configuring GIT
 
 We will be pushing code changes to a git repository we have provisioned for each user.  Before pushing to git you will need to set your git email and name.  To do this, from the integrated terminal, enter the following commands.
