@@ -15,8 +15,13 @@
 ** xref:35-summary.adoc[3.5 Summary]
 
 * xref:04-rhsi-introduction.adoc[4. Red Hat Service Interconnect Lab]
-** xref:41-rhsi-instructions.adoc[4.1 Red Hat Service Interconnect Lab Instructions]
-** xref:42-summary.adoc[4.2 Summary]
+** xref:41-access-environment.adoc[4.1 Access Your Development Environment]
+** xref:42-deployment-overview.adoc[4.2 Deployment overview]
+** xref:43-initialize-openshift.adoc[4.3 Initialize Red Hat Service Interconnect in the Openshift cluster]
+** xref:44-initialize-vm.adoc[4.4 Initialize Red Hat Service Interconnect in the RHEL VM]
+** xref:45-create-link.adoc[4.5 Create a link between the namespace on OpenShift cluster and the VM]
+** xref:46-verify.adoc[4.6 Verify the Service Interconnect network]
+** xref:47-summary.adoc[4.7 Summary]
 
 * xref:05-fuse-to-camelq-introduction.adoc[5. Red Hat Fuse to Camel Quarkus Lab]
 

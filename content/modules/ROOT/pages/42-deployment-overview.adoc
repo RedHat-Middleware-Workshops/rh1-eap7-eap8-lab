@@ -1,0 +1,25 @@
+
+## Deployment overview
+A legacy soap API has been deployed on the VM. The API returns a response as shown below
+----
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <ns2:SubscriberResponse xmlns:ns2="http://www.example.org/s1/">
+      <Name>Some</Name>
+      <Surname>One</Surname>
+      <Address>
+        <Number>1</Number>
+        <Street>Some Street</Street>
+        <City>Somewhere</City>
+        <PostCode>SOME C0D3</PostCode>
+        <Country>UK</Country>
+      </Address>
+    </ns2:SubscriberResponse>
+  </soap:Body>
+</soap:Envelope>
+----
+
+The goal of our exercise it to make this Legacy SOAP API accessible from the OpenShift cluster, without exposing it to the public internet and not using any complex VPNs or firewalls. We will do this by establishing a Layer 7 connectivity between the legacy SOAP service running on a virtual machine and an OpenShift namespace using *Red Hat Service Interconnect*
+
+There are multiple ways to setup layer 7 connectivity using Red Hat Service interconnect. You use either use the CLI or the OpenShift Operator. In this section we'll be using the operator to setup connectivity on the OpenShift end and the CLI to setup the connectivity on the VM side.

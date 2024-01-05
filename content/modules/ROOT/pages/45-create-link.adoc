@@ -1,0 +1,146 @@
+
+## Create a link between the namespace on OpenShift cluster and the VM
+To create a link between the environments, you create a token on one of the environments, and then use the token to create the link on the other. This token will be used to setup a mTLS (mutual TLS) secured link between the two environments.
+
+. Make sure you are on the OCP terminal
++
+image::rhsi-ocp-terminal.png[rhsi-ocp-terminal]
+
+. Create a YAML file named `token-request.yaml`` to request a token
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+vi token-request.yaml
+----
+
+. Paste the below contents in `token-request.yaml` and save it using the buttons esc followed by :wq and hit enter to save the file
++
+[source,yaml,role="copypaste"]
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    skupper.io/type: connection-token-request
+  name: secret-name
+----
+
+. Apply the YAML to the namespace to create a secret.
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+oc apply -f token-request.yaml
+----
+
+. Create the actual token from the secret
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+oc get secret -o yaml secret-name | yq 'del(.metadata.namespace)' > token.yaml
+----
+
+. Display the token and save it in a text editor . We'll use this token on VM to establish the connection
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+cat token.yaml
+----
++
+This is actually an OpenShift secret which contains a certificate. This certificate will be used to setup a mTLS (mutual TLS) secured link between the two environments. The next step is creating the link on the VM with the token.
+
+. Navigate to the the VM terminal that you have connected earlier to using the terminal on your local machine. Make sure you are logged in as *lab-user@bastion*
++
+image::rhsi-vm-terminal.png[rhsi-vm-terminal]
+
+. Create a new file on the VM terminal where you will paste the token you just generated on the OCP cluster.
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+vi secret.token
+----
+
+. Paste the token you saved earlier, in this file and save it using the buttons esc followed by :wq and hit enter to save the file. 
++
+[NOTE]
+====
+If you haven't saved the token earlier, you can also copy the contents of the `token.yaml` file as indicated below. Select all and copy the token
+====
++
+image::rhsi-token-file.png[rhsi-token-file]
+
+
+
+. Create a link on the VM using the token
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+skupper link create secret.token --name ocp-to-vm
+----
+
+. Output
++
+[source,sh,subs=attributes+]
+----
+Site configured to link to skupper-inter-router-{USER_ID}-project.{openshift_cluster_ingress_domain}:443 (name=ocp-to-vm)
+Check the status of the link using 'skupper link status'.
+----
+
+. Navigate back to the web console tab on your browser and refresh the tab. You should now be able to see the VM in the topology
++
+image::rhs-ocp-vm-topology.png[rhs-ocp-vm-topology]
++
+This confirms that the link has now been established
++
+[NOTE]
+====
+The circles depicting the environments might overlap each other sometimes and hence might not be visible. If that's the case, click on the circle that's visible and drag it to the side ensure proper visibility.
+====
+
+
+. Finally, you need to expose the soap service running on the VM over the link. This will allow the soap service to be accessed from the openshift cluster as if it was a local service. 
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+skupper expose host host.containers.internal --address soap-api --port 8080
+----
+
+. When you are connecting Openshift to the VM using Red Hat Service Interconnect, you have create a proxy service that will redirect to the service running on the VM. To achieve this first make sure you are on the OCP terminal
++
+image::rhsi-ocp-terminal.png[rhsi-ocp-terminal]
+
+. Create a yaml file with the name `skupper-service.yaml` 
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+vi skupper-service.yaml
+----
+
+
+. Paste the below contents in `skupper-service.yaml` and save it using the buttons esc followed by :wq and hit enter to save the file
++
+[source,yaml,role="copypaste"]
+----
+kind: Service
+apiVersion: v1
+metadata:
+  name: soap-api
+  annotations:
+    skupper.io/address: soap-api
+    skupper.io/port: "8080"
+    skupper.io/proxy: "tcp"
+    skupper.io/target: "soap-api"
+    
+spec:
+  ports:
+    - name: port8080
+      protocol: TCP
+      port: 8080
+      targetPort: 1025
+----
+
+. Create the service
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+oc apply -f skupper-service.yaml
+----
