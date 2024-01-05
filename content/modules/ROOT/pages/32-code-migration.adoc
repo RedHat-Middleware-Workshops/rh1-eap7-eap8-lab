@@ -4,7 +4,7 @@ Now that we've performed the analysis of our code to determine the changes neede
 
 === Automated file changes
 
-You can apply all the quickfixes to the code base by right clicking on "rh1-workshop-eap-app" at the top of the hierarchy and clicking on "Apply all guickfixes".
+You can apply all the quickfixes to the codebase by right clicking on "rh1-workshop-eap-app" at the top of the hierarchy and clicking on "Apply all guickfixes".
 
 This will make all the namespace changes from `javax` to `jakarta`, one of the key changes introduced by the move from JakartaEE 8 to JakartaEE 10.
 
@@ -154,6 +154,23 @@ to
 ----
 <version.server.bom>8.0.0.Beta-redhat-00004</version.server.bom>
 ----
+
+//TODO Remove when EAP 8.0 is GA
+IMPORTANT: Because EAP 8 is still Beta, we will need to configure the Red Hat maven repository to use the early access repository url. Once EAP 8.0 is GA this step will no longer be required
+
+To do this, change
+
+[source,xml]
+----
+<maven.redhat.repository.url>${maven.repository.protocol}://maven.repository.redhat.com/ga/</maven.redhat.repository.url>
+----
+to
+
+[source,xml,role="copypaste"]
+----
+<maven.redhat.repository.url>${maven.repository.protocol}://maven.repository.redhat.com/earlyaccess/all/</maven.redhat.repository.url>
+----      
+
 
 
 .Click here for reveal the modified pom.xml file
