@@ -6,9 +6,9 @@ JBoss EAP 8.0 requires code changes to applications written for JBoss EAP 7.4. D
 
 To perform the required code changes, we're going to use the Windup VS Code extension.  
 
-CLick on the Windup icon on the left hand panel.
-
 IMPORTANT: If you do not see the Windup icon on the left hand panel, refresh your browser.
+
+Click on the Windup icon on the left hand panel.
 
 image::windup-icon.png[windup-icon]
 
