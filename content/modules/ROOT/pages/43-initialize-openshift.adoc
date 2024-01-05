@@ -1,0 +1,71 @@
+
+## Initialize Red Hat Service Interconnect in the Openshift cluster
+
+As mentioned earlier, we could either use the CLI or operator to initialize Red Hat Service Interconnect. To showcase both the options we'll be using the operator on OpenShift end and CLI on the VM build the connectivity. 
+
+. From the devspaces UI navigate to the terminal on OpenShift where you logged into the OpenShift Cluster
++
+image::rhsi-ocp-terminal.png[rhsi-ocp-terminal]
+
+. Login to the right project
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+oc project {USER_ID}-project
+----
+
+. Create a config file with the name `mysite.yaml`
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+vi mysite.yaml
+----
+
+. Paste the below contents in `mysite.yaml` and save it using the buttons esc followed by :wq and hit enter to save the file
++
+[source,yaml,role="copypaste"]
+----
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: skupper-site
+data:
+  name: ocp
+  console: "true"
+  console-user: "admin"
+  console-password: "openshift"
+  flow-collector: "true"
+----
+
+
+. Initialize the Service Interconnect Router by issuing the below command in the OCP terminal. This should install the Service Interconnect resources in the namespace
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+oc apply -f mysite.yaml
+----
+
+. Navigate to the Red Hat Service Interconnect console to verify that OCP cluster appears in the topology. Once the connectivity is established we should be able to see the VM in the topology view too
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+https://skupper-{openshift_cluster_user_name}-project.{openshift_cluster_ingress_domain}/#/topology
+----
+
+. Navigate to the Red Hat Service Interconnect console to verify that OpenShift cluster (OCP) appears in the topology. Once the connectivity is established we should be able to see the VM in the topology view too. To get the URL of the console copy the output of the below command and paste in the browser
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+oc get routes skupper -o jsonpath='{.spec.host}'
+----
++
+Ignore any warnings and proceed by pressing the advanced link on your browser
+
+. Login with the following credentials:
++
+* *Username*: `admin``
+* *Password*: `openshift`
+
+. You should now be able to see that Openshift cluster (ocp) appears in the topology.
++
+image::rhsi-ocp-topology.png[rhsi-ocp-topology]

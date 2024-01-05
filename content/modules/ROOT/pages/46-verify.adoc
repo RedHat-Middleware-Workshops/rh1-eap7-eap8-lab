@@ -1,0 +1,59 @@
+
+## Verify the Service Interconnect network
+At this point you can verify that the service network is actually working as expected.
+
+. Make sure you are on the OCP terminal
++
+image::rhsi-ocp-terminal.png[rhsi-ocp-terminal]
+
+. Make sure you are on the `rh1-lab-eap-camel-quarkus` folder
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+pwd
+----
+
+. Output
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+/projects/rh1-lab-eap-camel-quarkus
+----
+
+. Navigate to the `soap1` folder
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+cd migration-fuse-camel-quarkus/base/camelq/stubs/soap1
+----
+
+. Send a request to the soap service. Observe that the URL that you are using is local OpenShift service and not any external route exposed to the public internet
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+curl -s -d @src/main/resources/request.xml http://soap-api.user1-project.svc.cluster.local:8080/services/s1 | xmllint --format -
+----
+
+. If our Service Interconnect network was setup correctly you should be able to see a response as shown below
++
+[source,xml,subs=attributes+]
+----
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <ns2:SubscriberResponse xmlns:ns2="http://www.example.org/s1/">
+      <Name>Some</Name>
+      <Surname>One</Surname>
+      <Address>
+        <Number>1</Number>
+        <Street>Some Street</Street>
+        <City>Somewhere</City>
+        <PostCode>SOME C0D3</PostCode>
+        <Country>UK</Country>
+      </Address>
+    </ns2:SubscriberResponse>
+  </soap:Body>
+</soap:Envelope>
+----
+
+Congratulations! You built a secure service network between services on two different environments and allowed applications to connect and communicate over the secure network using Red Hat Service Interconnect. 
