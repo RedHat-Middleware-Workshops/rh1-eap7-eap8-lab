@@ -29,6 +29,10 @@ Once this command completes, you should see:
 [INFO] ------------------------------------------------------------------------
 ----
 
+Switch to the {openshift_cluster_console_url}[OpenShift console^]  and view the topology for the {USER_ID}-project, you should see a topology similar to:
+
+image::complete-topology.png[complete topology]
+
 From your dev spaces terminal run the following command to test the Camel Quarkus app:
 
 [source,sh,role="copypaste",subs=attributes+]

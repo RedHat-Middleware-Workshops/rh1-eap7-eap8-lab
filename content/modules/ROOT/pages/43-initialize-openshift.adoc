@@ -14,6 +14,14 @@ image::rhsi-ocp-terminal.png[rhsi-ocp-terminal]
 oc project {USER_ID}-project
 ----
 
+. Ensure you're at the root of the project
++
+[source,sh,role="copypaste"]
+----
+cd /projects/rh1-lab-eap-camel-quarkus
+----
+
+
 . Create a config file with the name `mysite.yaml`
 +
 [source,sh,role="copypaste",subs=attributes+]
@@ -63,7 +71,7 @@ Ignore any warnings and proceed by pressing the advanced link on your browser
 
 . Login with the following credentials:
 +
-* *Username*: `admin``
+* *Username*: `admin`
 * *Password*: `openshift`
 
 . You should now be able to see that Openshift cluster (ocp) appears in the topology.
