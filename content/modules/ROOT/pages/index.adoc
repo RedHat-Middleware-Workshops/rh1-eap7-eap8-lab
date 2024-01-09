@@ -1,9 +1,10 @@
 == Introduction 
 A customer is embarking on a modernization and cloud migration project, they've selected OpenShift to run containerized workloads on a Hyperscaler.  They are now planning to move applications from virtual machines located on in-house data centers to OpenShift.  These applications will be updated to use cloud-native technologies in the process.
 In this scenario we will be discussing three different applications.
-A Red Hat Fuse application, which will be migrated to Red Hat build of Apache Camel Quarkus on OpenShift
-A JBoss EAP 7.4 application, which will be migrated to JBoss EAP 8.0 on OpenShift
-A legacy SOAP application, which will need to remain running on the in-house data center due to dependencies from other applications
+
+* A Red Hat Fuse application, which will be migrated to Red Hat build of Apache Camel Quarkus on OpenShift
+* A JBoss EAP 7.4 application, which will be migrated to JBoss EAP 8.0 on OpenShift
+* A legacy SOAP application, which will need to remain running on the in-house data center due to dependencies from other applications
 
 image::start-architecture.png[starting architecture]
 
@@ -12,13 +13,6 @@ As you can see from the existing architecture, all of these applications are dep
 In this lab, you'll learn about capabilities recently introduced in JBoss EAP 8, both for developer and operations teams, and how they integrate with new innovations across the OpenShift and App Services portfolio. You'll then get hands on, migrating an EAP 7 application from on-prem to the cloud with EAP 8 and OpenShift using the Migration Toolkit for Applications. You will also see how to migrate apps which depend on Fuse with Karaf to the Red Hat build of Apache Camel on OpenShift. Finally you will keep the service running even during extended migrations by easily and securely connecting the apps back to on-prem resources using Red Hat Service Interconnect.
 
 == Overview of the lab
-
-This lab consists of three components
-
-* A Red Hat Fuse application
-* A SOAP application
-* A EAP 7.4 application with a PostgreSQL database.
-
 
 The purpose of this lab is to move the EAP and Fuse applications to OpenShift, leaving the SOAP service on the virtual machine. In addition to moving the EAP and Fuse applications to OpenShift we will also be migrating the EAP 7.4 application to EAP 8.0, and the Red Hat Fuse application to Camel Quarkus.
 Additionally, to facilitate the SOAP service remaining on the virtual machine, we will use Red Hat Service Interconnect to create a connection from the OpenShift namespace to the SOAP service on VM.
