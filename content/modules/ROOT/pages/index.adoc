@@ -1,16 +1,21 @@
 == Introduction 
-A customer is embarking on a modernization and cloud migration project, they've selected OpenShift to run containerized workloads on a Hyperscaler.  They are now planning to move applications from virtual machines located on in-house data centers to OpenShift.  These applications will be updated to use cloud-native technologies in the process.
-In this scenario we will be discussing three different applications.
+A customer is embarking on a modernization and cloud migration project, they've selected OpenShift to run containerized workloads on a Hyperscaler.  They are now planning to move applications from virtual machines located on in-house datacenters to OpenShift.  These applications will be updated to use cloud-native technologies in the process.
 
-* A Red Hat Fuse application, which will be migrated to Red Hat build of Apache Camel Quarkus on OpenShift
-* A JBoss EAP 7.4 application, which will be migrated to JBoss EAP 8.0 on OpenShift
-* A legacy SOAP application, which will need to remain running on the in-house data center due to dependencies from other applications
+In this scenario we will be migrating a client lookup service which consists of three components:
+
+* A Red Hat Fuse application, which is the main entry point for the service and performs integration between the other two components
+* A JBoss EAP 7.4 application, this is responsible for retrieving subscriptions relating to a particular client
+* A legacy SOAP application, this is responsible for returning client details e.g. address.
 
 image::start-architecture.png[starting architecture]
 
-As you can see from the existing architecture, all of these applications are deployed on a virtual machine on an internal subnet.
+As you can see from the existing architecture, all of these applications are deployed on a virtual machine on an internal subnet. The SOAP service has some internal dependencies so this will be moved in a later phase.
 
-In this lab, you'll learn about capabilities recently introduced in JBoss EAP 8.0, both for developer and operations teams. You'll then get hands on, migrating an EAP 7.4 application from on-prem to the cloud with EAP 8.0 and OpenShift using the Migration Toolkit for Applications. You will also see how to migrate apps which depend on Fuse with Karaf to the Red Hat build of Apache Camel on OpenShift. Finally you will keep the service running even during extended migrations by easily and securely connecting the apps back to on-prem resources using Red Hat Service Interconnect.
+During the course of this lab we will:
+
+* Migrate the JBoss EAP 7.4 application to JBoss EAP 8.0 running on OpenShift
+* The SOAP service cannot be moved until a later phase, so we will use Red Hat Service Interconnect to establish a connection between an OpenShift namespace and the SOAP service running on a Virtual Machine.
+* Migrate the Red Hat Fuse application to a Red Hat build of Apache Camel on Quarkus application running on OpenShift
 
 The desired end state is as follows:
 
