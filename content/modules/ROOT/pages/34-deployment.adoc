@@ -460,7 +460,7 @@ The second build (or runtime build) will take the image created by the previous 
 
 When the second build is complete, the application will be deployed. The application is running when the pod donut around the JBoss EAP logo is dark blue (i.e., the pods are in a running state).
 
-It will take a while to build and deploy the application. To monitor the progress, follow these steps.
+It will take a while (around 8 minutes) to build and deploy the application. To monitor the progress, follow these steps.
 
 Go to Builds. 
 
