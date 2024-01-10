@@ -302,13 +302,11 @@ image::windup-complete.png[windup-complete]
 
 From the terminal enter the following to perform a test build:
 
-======
 [source,sh,role="copypaste"]
 ----
 cd /projects/rh1-lab-eap-camel-quarkus/rh1-workshop-eap-app/app
 ----
 
-======
 [source,sh,role="copypaste"]
 ----
 mvn clean package
@@ -316,7 +314,6 @@ mvn clean package
 
 Once the maven build is complete, you should see something like:
 
-======
 [source,sh]
 ----
 [INFO] Packaging webapp
@@ -330,7 +327,6 @@ Once the maven build is complete, you should see something like:
 [INFO] Total time:  20.083 s
 [INFO] Finished at: 2024-01-08T19:19:15Z
 [INFO] ------------------------------------------------------------------------
-
 ----
 
 The code changes required to move from JBoss EAP 7.4 to JBoss EAP 8.0 are now complete, we can now move on to deployment to OpenShift.
