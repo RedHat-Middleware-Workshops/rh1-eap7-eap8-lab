@@ -1,6 +1,6 @@
 == OpenShift Environment
 
-Before we deploy our JBoss EAP 8.0 application on OpenShift, we need to deploy a PostgreSQL database.
+The JBoss EAP application requires a connection to a PostgreSQL database.  Before we deploy our application on OpenShift we will need to deloy an instance of PostgreSQL.
 
 Access the OpenShift console by clicking on the following {openshift_cluster_console_url}[link^] 
 
@@ -13,7 +13,7 @@ Login with the following credentials:
 
 ## Deploy a PostgreSQL database
 
-Within this project, add a PostgreSQL database by Clicking on "+Add" and selecting "Database" from the Developer catalog.
+Within this project, add a PostgreSQL database by clicking on "+Add" and selecting "Database" from the Developer catalog.
 
 From the Developer catalog, select the "PostgreSQL" template and fill out the form details as shown below.
 
@@ -27,7 +27,7 @@ image::postgresql-template.png[postgresql-template]
 
 Click on "Create" to create the postgreSQL database instance.
 
-Switch to the Topology view, you should see the PostgeSQL database deployed and running.
+Switch to the Topology view, you should see the PostgreSQL database deployed and running.
 
 image::postgres-running.png[postgresql-running]
 

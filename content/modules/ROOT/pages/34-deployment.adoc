@@ -379,7 +379,7 @@ Enter `openshift`
 
 Your changes will be pushed to gitea.
 
-We can now deploy our JBoss EAP 8.0 application with Helm.
+We can now deploy your JBoss EAP 8.0 application with Helm.
 
 Access the OpenShift console by clicking on the following {openshift_cluster_console_url}[link^] 
 
@@ -394,11 +394,11 @@ Click on Add+.
 
 Select Helm Chart from the developer catalog.
 
-Enter eap in the Filter by keyword field as shown below:
+Enter `eap` in the Filter by keyword field as shown below:
 
 image::helm-charts.png[migration]
 
-Select the JBoss EAP 8 Helm chart from the catalog.
+Select the `JBoss EAP 8` Helm chart from the catalog.
 
 Click on "Create".
 
@@ -437,11 +437,30 @@ deploy:
           name: postgresql
 ----
 
-Note: There are a few things to point out in this Helm configuration. We have defined a build time variable POSTGRESQL_DRIVER_VERSION to determine how the PostgreSQL driver version is passed to the eap-maven-plugin when S2I builds the application image. Runtime environment variables (such as user credentials) are read from a secret created when the database is instantiated. So application configuration can be safely stored in Git without any sensitive information.
+Note: There are a few things to point out in this Helm configuration. 
 
-Two build-configs are created by this Helm chart: an artifacts build and a runtime build. When the second build is complete, the application will be deployed. The application is running when the pod donut around the JBoss EAP logo is dark blue (i.e., the pods are in a running state).
+We have defined a build time variable POSTGRESQL_DRIVER_VERSION to determine which PostgreSQL driver version is passed to the eap-maven-plugin when S2I builds the application image. 
 
-It will take a while to build and deploy the application. To monitor the progress, follow these steps.
+Runtime environment variables (such as user credentials) are read from the postgresql secret which was created when the database was instantiated. 
+
+Click on "Create" to deploy this Helm chart.
+
+Two build-configs are created by this Helm chart, an artifacts build and a runtime build. In this case these are named:
+
+* eap8-build-artifacts
+* eap8
+
+The "eap8-build-artifacts" will start automatcally.  This build is responsible for deploying the required instance of JBoss EAP, based on the feature packs and layers configured by the eap-maven-pluggin (as described above), configuring JBoss EAP (e.g. to connect to a database), and building and deploying the application.
+
+The output from the eap8-build-artifacts build is an image containing a deployed instance of JBoss EAP, configured, and running the built application.
+
+Once the first build is complete, the second build (eap8) will start automatically.
+
+The second build (or runtime build) will take the image created by the previous build and copy this to a "slimmed down" runtime image, the runtime image contains just enough OS libraries to run JBoss EAP.
+
+When the second build is complete, the application will be deployed. The application is running when the pod donut around the JBoss EAP logo is dark blue (i.e., the pods are in a running state).
+
+It will take a while (around 8 minutes) to build and deploy the application. To monitor the progress, follow these steps.
 
 Go to Builds. 
 
