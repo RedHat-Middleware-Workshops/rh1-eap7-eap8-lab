@@ -1,6 +1,6 @@
 == Access Your Development Environment
 
-You will be using Red Hat OpenShift Dev Spaces. **Changes to files are auto-saved every few seconds**, so you don't need to explicitly save changes.
+You will be using Red Hat OpenShift Dev Spaces, a browser-based IDE. **Changes to files are auto-saved every few seconds**, so you don't need to explicitly save changes.
 
 To get started, {devspaces_url}[access the Red Hat OpenShift Dev Spaces^] you will be presented with an option to login with your OpenShift credentials
 

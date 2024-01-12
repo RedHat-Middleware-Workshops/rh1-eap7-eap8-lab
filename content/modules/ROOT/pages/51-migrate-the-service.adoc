@@ -221,7 +221,7 @@ The auto-generated code automation shown above is enabled via the configuration 
 Follow the steps below to configure the plugin:
 
 --
-. Open your `pom.xml` file and find the following region in the code:
+. Open the file `migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/pom.xml` file and find the following region in the code:
 +
 ----
 <plugins>
@@ -374,7 +374,7 @@ Run the following command:
 
 [source,sh,role="copypaste"]
 ----
-curl -H "content-type: application/json" -d '{"id":"123"}' http://localhost:8080/camel/subscriber/details
+curl -H "content-type: application/json" -d '{"id":"123"}' http://localhost:8080/camel/subscriber/details | jq
 ----
 
 
