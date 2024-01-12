@@ -1,6 +1,6 @@
 
 ## Initialize Red Hat Service Interconnect in the RHEL VM
-We'll be using the CLI to initialize Red Hat Service Interconnect \on the VM.  
+We'll be using the CLI to initialize Red Hat Service Interconnect on the VM.
 
 . Go to the terminal on the devspaces where you are logged in to the VM.
 +
