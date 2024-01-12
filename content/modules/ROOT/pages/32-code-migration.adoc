@@ -23,7 +23,9 @@ Once the analysis is completed, you should see the analysis results showing only
 
 === Remaining file changes
 
-If we look at the report we'll see the following relating to persistence.xml
+Click the report icon again to view the HTML version of the report.
+
+Click on `App` and then select `Issues` and then click on `Replace the Java EE XSD with the Jakarta equivalent`, you will see the following relating to persistence.xml
 
 image::persistence-changes.png[persistence-changes]
 
@@ -65,7 +67,7 @@ https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
 ----
 ======
 
-For the pom.xml changes, if we look at the report we will see the following:
+For the pom.xml changes, if we look at the report again we will see the following:
 
 image::pom-changes1.png[pom-changes]
 
