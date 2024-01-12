@@ -20,7 +20,7 @@ For example posting the following data to `/subscribers`
 {"id": 0}
 ----
 
-Will return client subscriptions:
+Will return client subscriptions e.g.:
 
 [source,bash]
 ----

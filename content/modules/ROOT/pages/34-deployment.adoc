@@ -460,7 +460,9 @@ The second build (or runtime build) will take the image created by the previous 
 
 When the second build is complete, the application will be deployed. The application is running when the pod donut around the JBoss EAP logo is dark blue (i.e., the pods are in a running state).
 
-It will take a while (around 8 minutes) to build and deploy the application. To monitor the progress, follow these steps.
+WARNING: It will take a while (around 8 minutes) to build and deploy the application. You may see some errors on the EAP8 pod until the builds are complete.
+
+To monitor the progress, follow these steps.
 
 Go to Builds. 
 
@@ -472,7 +474,7 @@ Choose the Builds tab.
 
 Click on `eap8-build-artifacts-1` to view the logs of the active build.
 
-Once the builds are complete, you will be able to click the Open URL icon of the eap8 deployment to view the running application.
+Once the builds are complete, you will see the application being deployed and the "donut" turning blue as shown below.
 
 image::eap8-on-ocp.png[eap8-on-ocp]
 
