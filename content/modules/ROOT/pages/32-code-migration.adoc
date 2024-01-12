@@ -1,55 +1,60 @@
-== Code Migration
+= Code Migration
 
 Now that we've performed the analysis of our code to determine the changes needed to migrate to JBoss EAP 8.0, we can now make the changes to the code using automated and manual code changes.
 
-=== Automated file changes
+== 1. Automated file changes
 
+. Apply the quick-fixes
++
 You can apply all the quickfixes to the codebase by right clicking on "rh1-workshop-eap-app" at the top of the hierarchy and clicking on "Apply all quickfixes".
-
++
 This will make all the namespace changes from `javax` to `jakarta`, one of the key changes introduced by the move from JakartaEE 8 to JakartaEE 10.
-
++
 image::windup-qf.png[windup-qf]
-
++
 Once you've applied the quickfixes, we will re-run the analysis report. This will allow us to focus on the remaining code changes.
 
-To perform the code analysis, click on the start button as shown below
+== 2. Re-run the analysis
 
+. To perform the code analysis, click on the start button as shown below
++ 
 image::windup-start.png[windup-start]
-
++
 Once the analysis is completed, you should see the analysis results showing only two files requiring changes:
-
++
 * persistence.xml
 * pom.xml
 
-=== Remaining file changes
+== 3. persistence.xml
 
-Click the report icon again to view the HTML version of the report.
+. Click the report icon again to view the HTML version of the report.
 
-Click on `App` and then select `Issues` and then click on `Replace the Java EE XSD with the Jakarta equivalent`, you will see the following relating to persistence.xml
-
+. Click on `App` and then select `Issues` and then click on `Replace the Java EE XSD with the Jakarta equivalent`, you will see the following relating to persistence.xml
++
 image::persistence-changes.png[persistence-changes]
-
-In the Analysis results tree click on "persistence.xml".  Change
-
++
+In the Analysis results tree click on "persistence.xml".  
++
+. Change
++
 [source,xml]
 ----
 http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 ----
-
++
 to 
++
 [source,xml,role="copypaste"]
 ----
 https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
 ----
-
-
++
 .Click here for reveal the modified persistence.xml file
 [%collapsible]
 ======
 [source,xml,role="copypaste"]
 ----
 <?xml version="1.0" encoding="UTF-8"?>
-
 <persistence version="3.0"
    xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="
@@ -67,6 +72,8 @@ https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
 ----
 ======
 
+== 4. pom.xml
+
 For the pom.xml changes, if we look at the report again we will see the following:
 
 image::pom-changes1.png[pom-changes]
@@ -75,10 +82,10 @@ image::pom-changes2.png[pom-changes]
 
 image::pom-changes3.png[pom-changes]
 
-Open the pom.xml file and make the following changes
-
-Change 
-
+. Open the pom.xml file and make the following changes
++
+. Change 
++
 [source,xml]
 ----
         <dependency>
@@ -87,8 +94,9 @@ Change
             <scope>provided</scope>
         </dependency>
 ----
-
++
 to
++
 [source,xml,role="copypaste"]
 ----
         <dependency>
@@ -97,8 +105,9 @@ to
             <scope>provided</scope>
         </dependency>
 ----
-
-Change
++
+. Change
++
 [source,xml]
 ----
             <dependency>
@@ -110,6 +119,7 @@ Change
             </dependency>
 ----
 to 
++
 [source,xml,role="copypaste"]
 ----
             <dependency>
@@ -120,7 +130,8 @@ to
                 <scope>import</scope>
             </dependency>
 ----
-Change
+. Change
++
 [source,xml]
 ----
 
@@ -130,7 +141,9 @@ Change
             <scope>provided</scope>
         </dependency>
 ----
++
 to
++
 [source,xml,role="copypaste"]
 ----
         <dependency>
@@ -139,38 +152,38 @@ to
             <scope>provided</scope>
         </dependency>
 ----
-
-Finally, we need to change 
++
+. Change
++ 
 [source,xml]
 ----
 <version.server.bom>7.4.0.GA</version.server.bom>
 ----
++
 to
-
-//TODO Change when EAP 8.0 is GA
++
 [source,xml,role="copypaste"]
 ----
 <version.server.bom>8.0.0.Beta-redhat-00004</version.server.bom>
 ----
-
++
 //TODO Remove when EAP 8.0 is GA
 IMPORTANT: Because EAP 8 is still Beta, we will need to configure the Red Hat maven repository to use the early access repository url. Once EAP 8.0 is GA this step will no longer be required
 
-To do this, change
-
+. Change
++
 [source,xml]
 ----
 <maven.redhat.repository.url>${maven.repository.protocol}://maven.repository.redhat.com/ga/</maven.redhat.repository.url>
 ----
++
 to
-
++
 [source,xml,role="copypaste"]
 ----
 <maven.redhat.repository.url>${maven.repository.protocol}://maven.repository.redhat.com/earlyaccess/all/</maven.redhat.repository.url>
 ----      
-
-
-
++
 .Click here for reveal the modified pom.xml file
 [%collapsible]
 ======
@@ -298,26 +311,28 @@ to
 ----
 ======
 
+== 5. Re-run the analysis
+
 Once we've made these changes, we can re-run the analysis to ensure all changes are complete.  You should see zero story points as shown below:
 
 image::windup-complete.png[windup-complete]
 
 NOTE: The `pom.xml` file is still highlited in the tree view.  This is normal, and indicates an "Information" level rule. This can be ignored.
 
-From the terminal enter the following to perform a test build:
-
+. From the terminal enter the following to perform a test build:
++
 [source,sh,role="copypaste"]
 ----
 cd /projects/rh1-lab-eap-camel-quarkus/rh1-workshop-eap-app/app
 ----
-
++
 [source,sh,role="copypaste"]
 ----
 mvn clean package
 ----
-
++
 Once the maven build is complete, you should see something like:
-
++
 [source,sh]
 ----
 [INFO] Packaging webapp

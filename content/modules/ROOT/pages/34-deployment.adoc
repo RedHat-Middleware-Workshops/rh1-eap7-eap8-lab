@@ -1,4 +1,4 @@
-== Deploying the JBoss EAP 8.0 application to OpenShift
+= Deploying the JBoss EAP 8.0 application to OpenShift
 
 JBoss EAP 8.0 introduced changes to the provisioning and configuration of JBoss EAP application images on Red Hat OpenShift. The process adopted the JBoss EAP Maven plugin, which provides significant improvements that make configuring JBoss EAP on OpenShift easier and more flexible.
 
@@ -10,6 +10,8 @@ The JBoss EAP Maven plugin uses https://github.com/wildfly/galleon#overview[Gall
 
 To build and deploy this application on OpenShift, the only change we need to make is to the Maven pom.xml file. This involves adding the eap-maven-plugin, which takes care of all the provisioning and configuration required to build an instance of JBoss EAP 8.0 to run our application.
 
+== 1. Addition of eap-maven-plugin
+
 First step is to add the Red Hat plugin repositories for GA and early access software. Go to your DevSpaces workspace and open the file `app/pom.xml` and add this after the repositories tag.
 
 . Find in your `app/pom.xml` file the region of code with the following declaration:
@@ -19,8 +21,8 @@ First step is to add the Red Hat plugin repositories for GA and early access sof
 <!-- Paste pluginrepositories here -->       
 ----
 
-Paste the following xml where is says `<!-- Paste pluginrepositories here -->`
-
+. Paste the following xml where is says `<!-- Paste pluginrepositories here -->`
++
 [source,xml,role="copypaste"]
 ----
    <pluginRepositories>
@@ -61,15 +63,15 @@ Paste the following xml where is says `<!-- Paste pluginrepositories here -->`
     </pluginRepositories>
 ----
 
-Also in the pom.xml file the region of code with the following declaration:
+. Also in the pom.xml file the region of code with the following declaration:
 +
 ----
         
 <!-- Paste OpenShift profile here -->     
 ----
 
-Replace `<!-- Paste OpenShift profile here -->` with the following xml
-
+. Replace `<!-- Paste OpenShift profile here -->` with the following xml
++
 [source,xml,role="copypaste"]
 ----
     <profile>
@@ -125,9 +127,7 @@ Replace `<!-- Paste OpenShift profile here -->` with the following xml
         </build>
     </profile>
 ----
-
-
-
++
 .Click here for reveal the modified pom.xml file
 [%collapsible]
 ======
@@ -363,63 +363,65 @@ We can also see the inclusion of two layers in our pom.xml file snippet:
 
 The addition of datasources feature pack and postgresql-datasource layer will instruct the eap-maven-plugin to install and configure a data source to connect to a PostgreSQL database. If we look at the documentation for the PostgresSQL layer, we can see the need for a POSTGRESQL_DRIVER_VERSION build time environment variable. This build time environment variable is mandatory and tells the eap-maven-plugin which version of the PostgreSQL driver to install.
 
-== Deploy the application to OpenShift
+== 2. Push our code changes to Gitea
 
 To deploy our application to OpenShift changes will need to be pushed to gitea, a local git repository for use during this workshop.
 
-Click on the "Source Control" icon in the IDE, you should see the following:
-
+. Click on the "Source Control" icon in the IDE, you should see the following:
++
 image::gitea-eap8-ocp.png[source-contol]
 
-Enter a commit message in the message field and click on the "Commit" button.
-
+. Enter a commit message in the message field and click on the "Commit" button.
++
 You will be prompted to stage files to the commit
-
++
 image::git-2.png[stage-files]
 
-Click on "Yes" and then click on "Sync Changes" to push your changes to gitea
-
+. Click on "Yes" and then click on "Sync Changes" to push your changes to gitea
++
 You will be prompted to enter a username:
-
++
 image::git-3.png[git-username]
 
-Enter `{USER_ID}`
-
+. Enter `{USER_ID}`
++
 You will then be prompted for a password:
 
-Enter `openshift`
-
+. Enter `openshift`
++
 Your changes will be pushed to gitea.
+
+== 3. Deploy the application with Helm
 
 We can now deploy your JBoss EAP 8.0 application with Helm.
 
-Access the OpenShift console by clicking on the following {openshift_cluster_console_url}[link^] 
+. Access the OpenShift console by clicking on the following {openshift_cluster_console_url}[link^] 
 
-Login with the following credentials:
-
+. Login with the following credentials:
++
 * *Username*: `{USER_ID}`
 * *Password*: `openshift`
 
-Switch to the project called "{USER_ID}-project"
+. Switch to the project called "{USER_ID}-project"
 
-Click on Add+.
+. Click on Add+.
 
-Select Helm Chart from the developer catalog.
+. Select Helm Chart from the developer catalog.
 
-Enter `eap` in the Filter by keyword field as shown below:
-
+. Enter `eap` in the Filter by keyword field as shown below:
++
 image::helm-charts.png[migration]
 
-Select the `JBoss EAP 8` Helm chart from the catalog.
+. Select the `JBoss EAP 8` Helm chart from the catalog.
 
-Click on "Create".
+. Click on "Create".
 
-Switch to YAML view.
+. Switch to YAML view.
 
-Delete the existing content.
+. Delete the existing content.
 
-Paste the following YAML:
-
+. Paste the following YAML:
++
 [source,yaml,role="copypaste",subs=attributes+]
 ----
 build:
@@ -448,55 +450,55 @@ deploy:
           key: database-user
           name: postgresql
 ----
-
++
 Note: There are a few things to point out in this Helm configuration. 
-
++
 We have defined a build time variable POSTGRESQL_DRIVER_VERSION to determine which PostgreSQL driver version is passed to the eap-maven-plugin when S2I builds the application image. 
-
++
 Runtime environment variables (such as user credentials) are read from the postgresql secret which was created when the database was instantiated. 
 
-Click on "Create" to deploy this Helm chart.
-
+. Click on "Create" to deploy this Helm chart.
++
 Two build-configs are created by this Helm chart, an artifacts build and a runtime build. In this case these are named:
-
++
 * eap8-build-artifacts
 * eap8
-
++
 The "eap8-build-artifacts" will start automatically.  This build is responsible for deploying the required instance of JBoss EAP, based on the feature packs and layers configured by the eap-maven-pluggin (as described above), configuring JBoss EAP (e.g. to connect to a database), and building and deploying the application.
-
++
 The output from the eap8-build-artifacts build is an image containing a deployed instance of JBoss EAP, configured, and running the built application.
-
++
 Once the first build is complete, the second build (eap8) will start automatically.
-
++
 The second build (or runtime build) will take the image created by the previous build and copy this to a "slimmed down" runtime image, the runtime image contains just enough OS libraries to run JBoss EAP.
-
++
 When the second build is complete, the application will be deployed. The application is running when the pod donut around the JBoss EAP logo is dark blue (i.e., the pods are in a running state).
-
++
 WARNING: It will take a while (around 8 minutes) to build and deploy the application. You may see some errors on the EAP8 pod until the builds are complete.
 
-To monitor the progress, follow these steps.
+. To monitor the progress, follow these steps.
 
-Go to Builds. 
-
+. Go to Builds. 
++
 image::eap8-builds.png[migration]
 
-Select `eap8-build-artifacts`.
+. Select `eap8-build-artifacts`.
++
+. Choose the Builds tab.
 
-Choose the Builds tab.
-
-Click on `eap8-build-artifacts-1` to view the logs of the active build.
-
+. Click on `eap8-build-artifacts-1` to view the logs of the active build.
++
 Once the builds are complete, you will see the application being deployed and the "donut" turning blue as shown below.
-
++
 image::eap8-on-ocp.png[eap8-on-ocp]
 
-== Testing the deployment
+== 4. Testing the deployment
 
 The application we've deployed can be tested using curl from the terminal in OpenShift Dev Spaces
 
 include::partial$open-terminal.adoc[]
 
-From the terminal, enter the following command to test the deployment:
+. From the terminal, enter the following command to test the deployment:
 
 [source,bash,role="copypaste",subs=attributes+]
 ----

@@ -1,49 +1,53 @@
-== Code Analysis
+= Code Analysis
 
 JBoss EAP 8.0 requires code changes to applications written for JBoss EAP 7.4. Due to the move from Jakarta 8 to Jakarta 10 (e.g. converting from the “javax” namespace to “jakarta” namespace). These changes are documented in this https://access.redhat.com/articles/6980265[article, window="_blank"]. 
 
-== Using the Windup VS Code extension
+== 1. Using the Windup VS Code extension
 
 To perform the required code changes, we're going to use the Windup VS Code extension.  
 
 IMPORTANT: If you do not see the Windup icon on the left hand panel, refresh your browser.
 
-Click on the Windup icon on the left hand panel.
-
+. Click on the Windup icon on the left hand panel.
++
 image::windup-icon.png[windup-icon]
-
++
 You should see the Windup configuration page open.
 
-Configure the Windup VS-Code extension as follows
+. Configure the Windup VS-Code extension as follows
++
 
 image::windup-config.png[windup-config]
 
-* Set code location to:
-
+. Set code location to:
++
 [source,sh,role="copypaste"]
 ----
 /projects/rh1-lab-eap-camel-quarkus/rh1-workshop-eap-app/app
 ----
-
++
 * Ensure "eap8 and openjdk17" are selected under "--target" 
 
-To perform the code analysis, click on the "Run" button as shown below
+. To perform the code analysis, click on the "Run" button as shown below
++
 
 image::windup-start.png[windup-start]
-
++
 Once the analysis is complete, you should see a file hierachy in the left hand window.  
 
-At the top of the file hierarchy is a report icon (in green).  Click on this to view the HTML version of the report.
+. At the top of the file hierarchy is a report icon (in green).  Click on this to view the HTML version of the report.
++
 
 image::windup-results.png[windup-results]
-
++
 Clicking on a file will open up the editor showing where the issues are with the file.
 
-Click on "App" in the report, and then select the "Issues" tab to view the details of the migration.
+. Click on "App" in the report, and then select the "Issues" tab to view the details of the migration.
++
 
 image::windup-report-issues.png[mtr-report-issues]
-
++
 You can also select a file from the hierarchy examine in the issues in the code.
-
++
 image::windup-file.png[windup-file]
 
