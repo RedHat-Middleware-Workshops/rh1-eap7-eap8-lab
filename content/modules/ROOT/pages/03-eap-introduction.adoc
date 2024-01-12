@@ -13,16 +13,37 @@ In this lab you will be guided through the migration of a simple JBoss EAP 7.4 a
 
 The application we are migrating provides a simple RESTful interface to return data from a PostgreSQL database. 
 
-For example posting the following data to `/subscribers`
+Once you deploy the app during this exercise, you’ll be able to post the following data to `/subscribers`
 
-[source,bash]
+[source,json]
 ----
 {"id": 0}
 ----
 
 Will return client subscriptions e.g.:
 
-[source,bash]
+[source,json]
 ----
-{"subscriptions":{"packages":[{"amount":16,"id":"i-001"},{"amount":32,"id":"i-002"},{"amount":200,"id":"i-018"}],"period":{"end":"01-01-2024","start":"01-01-2023"}}}
+{
+  "subscriptions": {
+    "packages": [
+      {
+        "amount": 16,
+        "id": "i-001"
+      },
+      {
+        "amount": 32,
+        "id": "i-002"
+      },
+      {
+        "amount": 200,
+        "id": "i-018"
+      }
+    ],
+    "period": {
+      "end": "01-01-2024",
+      "start": "01-01-2023"
+    }
+  }
+}
 ----

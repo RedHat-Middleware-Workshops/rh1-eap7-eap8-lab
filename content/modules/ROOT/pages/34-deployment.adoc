@@ -10,7 +10,16 @@ The JBoss EAP Maven plugin uses https://github.com/wildfly/galleon#overview[Gall
 
 To build and deploy this application on OpenShift, the only change we need to make is to the Maven pom.xml file. This involves adding the eap-maven-plugin, which takes care of all the provisioning and configuration required to build an instance of JBoss EAP 8.0 to run our application.
 
-First step is to add the Red Hat plugin repositories for GA and early access software. Open the file `app/pom.xml` and add this after the repositories tag.
+First step is to add the Red Hat plugin repositories for GA and early access software. Go to your DevSpaces workspace and open the file `app/pom.xml` and add this after the repositories tag.
+
+. Find in your `app/pom.xml` file the region of code with the following declaration:
++
+----
+        
+<!-- Paste pluginrepositories here -->       
+----
+
+Paste the following xml where is says `<!-- Paste pluginrepositories here -->`
 
 [source,xml,role="copypaste"]
 ----
@@ -52,11 +61,17 @@ First step is to add the Red Hat plugin repositories for GA and early access sof
     </pluginRepositories>
 ----
 
-Also in the pom.xml file add the following before the closing tag replacing the existing <profiles> block:
+Also in the pom.xml file the region of code with the following declaration:
++
+----
+        
+<!-- Paste OpenShift profile here -->     
+----
+
+Replace `<!-- Paste OpenShift profile here -->` with the following xml
 
 [source,xml,role="copypaste"]
 ----
-<profiles>
     <profile>
         <id>openshift</id>
         <build>
@@ -109,7 +124,6 @@ Also in the pom.xml file add the following before the closing tag replacing the 
             </plugins>
         </build>
     </profile>
-</profiles>
 ----
 
 
@@ -351,9 +365,7 @@ The addition of datasources feature pack and postgresql-datasource layer will in
 
 == Deploy the application to OpenShift
 
-To deploy our application to OpenShift we need to push our code changes to our gitea repository.
-
-include::partial$configure-git.adoc[]
+To deploy our application to OpenShift changes will need to be pushed to gitea, a local git repository for use during this workshop.
 
 Click on the "Source Control" icon in the IDE, you should see the following:
 
@@ -450,7 +462,7 @@ Two build-configs are created by this Helm chart, an artifacts build and a runti
 * eap8-build-artifacts
 * eap8
 
-The "eap8-build-artifacts" will start automatcally.  This build is responsible for deploying the required instance of JBoss EAP, based on the feature packs and layers configured by the eap-maven-pluggin (as described above), configuring JBoss EAP (e.g. to connect to a database), and building and deploying the application.
+The "eap8-build-artifacts" will start automatically.  This build is responsible for deploying the required instance of JBoss EAP, based on the feature packs and layers configured by the eap-maven-pluggin (as described above), configuring JBoss EAP (e.g. to connect to a database), and building and deploying the application.
 
 The output from the eap8-build-artifacts build is an image containing a deployed instance of JBoss EAP, configured, and running the built application.
 
@@ -488,14 +500,35 @@ From the terminal, enter the following command to test the deployment:
 
 [source,bash,role="copypaste",subs=attributes+]
 ----
-curl -X POST http://eap8.{USER_ID}-project.svc.cluster.local:8080/subscribers -H 'Content-Type: application/json' -d '{"id": 0}'
+curl -X POST http://eap8.{USER_ID}-project.svc.cluster.local:8080/subscribers -H 'Content-Type: application/json' -d '{"id": 0}' | jq
 ----
 
 You should see a response similar to:
 
-[source,bash]
+[source,json]
 ----
-{"subscriptions":{"packages":[{"amount":16,"id":"i-001"},{"amount":32,"id":"i-002"},{"amount":200,"id":"i-018"}],"period":{"end":"01-01-2024","start":"01-01-2023"}}}
+{
+  "subscriptions": {
+    "packages": [
+      {
+        "amount": 16,
+        "id": "i-001"
+      },
+      {
+        "amount": 32,
+        "id": "i-002"
+      },
+      {
+        "amount": 200,
+        "id": "i-018"
+      }
+    ],
+    "period": {
+      "end": "01-01-2024",
+      "start": "01-01-2023"
+    }
+  }
+}
 ----
 
 We've now completed the migration of our JBoss EAP 8.0 application to OpenShift.

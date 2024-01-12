@@ -300,6 +300,8 @@ Once we've made these changes, we can re-run the analysis to ensure all changes 
 
 image::windup-complete.png[windup-complete]
 
+NOTE: The `pom.xml` file is still highlited in the tree view.  This is normal, and indicates an "Information" level rule. This can be ignored.
+
 From the terminal enter the following to perform a test build:
 
 [source,sh,role="copypaste"]

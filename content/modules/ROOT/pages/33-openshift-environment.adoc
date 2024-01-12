@@ -15,7 +15,11 @@ Login with the following credentials:
 
 Within this project, add a PostgreSQL database by clicking on "+Add" and selecting "Database" from the Developer catalog.
 
-From the Developer catalog, select the "PostgreSQL" template and fill out the form details as shown below.
+From the Developer catalog, select the "PostgreSQL" template.
+
+image::postgres.png[postgresql]
+
+Fill out the form details as shown below.
 
 image::postgresql-template.png[postgresql-template]
 [source,sh]
@@ -33,7 +37,7 @@ image::postgres-running.png[postgresql-running]
 
 While this is happening we can go ahead and create a config map containing runtime variables for our EAP application.  
 
-This config map contains non-sensitive information relating to the PostgreSQL connection connection such as the database service host and database name.  Sensitive information such as username / password will be pulled from the secrets created when these services where deployed.
+This config map contains non-sensitive information relating to the PostgreSQL connection connection such as the database service host and database name.  Sensitive information such as username / password will be pulled from the secrets created when these services were deployed.
 
 To create the config map, click on "ConfigMaps" on the left menu and click on "Create ConfigMap".  From the "Create ConfigMap" page, select "YAML view" and paste the following text:
 
