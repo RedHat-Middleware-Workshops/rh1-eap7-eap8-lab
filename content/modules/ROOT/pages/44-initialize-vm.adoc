@@ -39,7 +39,7 @@ skupper init --ingress none
 
 . Output
 +
-[source,sh,role="copypaste",subs=attributes+]
+[source,sh,subs=attributes+]
 ----
 Skupper is now installed for user 'lab-user'.  Use 'skupper status' to get more information.
 ----
