@@ -149,7 +149,7 @@ NOTE: This new line is needed because the mechanism to configure test values in 
 
 The embedded Camel routes above implement the REST and SOAP mock backends you saw earlier in the diagram:
 
-image::test-unit-mocks.png[align="center", width=20%]
+image::test-unit-mocks.png[align="center"]
 
 {empty} +
 

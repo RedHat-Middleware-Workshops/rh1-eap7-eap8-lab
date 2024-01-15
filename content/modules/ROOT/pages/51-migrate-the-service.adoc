@@ -361,6 +361,8 @@ cd /projects/rh1-lab-eap-camel-quarkus/migration-fuse-camel-quarkus/migration/ca
 ./mvnw clean compile quarkus:dev
 ----
 
+NOTE: This command will take a long to complete while all the Maven artifacts are downloaded.
+
 Once the Quarkus application is running, open another Terminal tab (by clicking on the "+" icon).
 
 Run the following command:
