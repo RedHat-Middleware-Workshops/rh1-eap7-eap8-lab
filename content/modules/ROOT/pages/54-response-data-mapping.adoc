@@ -171,14 +171,12 @@ Find in your template the following (empty) definition:
 
 And follow the instructions below:
 
-. Remove the following lines:
+. Remove the following 2 lines:
 +
 ----
       <!-- REMOVE DUMMY RESPONSE -->
       <to uri="language:constant:resource:classpath:/data/dummy.json"/>
 ----
-+
-IMPORTANT: Make sure you also replace the section: <to uri="language:constant:resource:classpath:/data/dummy.json"/>
 
 . And replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
 +
