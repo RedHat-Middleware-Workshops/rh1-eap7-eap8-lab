@@ -1,6 +1,8 @@
+# Linking RHSI on OpenShif and VM
 
-## Create a link between the namespace on OpenShift cluster and the VM
 To create a link between the environments, you create a token on one of the environments, and then use the token to create the link on the other. This token will be used to setup a mTLS (mutual TLS) secured link between the two environments.
+
+## 1. Create a token from RHSI on OpenShift
 
 . Make sure you are on the OCP terminal
 +
@@ -37,6 +39,8 @@ oc get secret -o yaml secret-name | yq 'del(.metadata.namespace)' > token.yaml
 ----
 +
 Open the newly-created `token.yaml` file in DevSpaces by clicking on it on the left. This is actually an OpenShift secret which contains a certificate. This certificate will be used to setup a mTLS (mutual TLS) secured link between the two environments. The next step is creating the link on the VM with the token.
+
+## 2. Create link on the VM with the token
 
 . In the OCP Terminal, run the following command to copy this token file to the VM into the home directory for `lab-user`:
 +

@@ -1,6 +1,9 @@
 
-## Verify the Service Interconnect network
+# Verify the Service Interconnect network
+
 At this point you can verify that the service network is actually working as expected.
+
+## 1. Test SOAP request
 
 . Make sure you are on the OCP terminal
 +

@@ -1,7 +1,9 @@
 
-== Test driven SOAP integration
+= Test driven SOAP integration
 
 We now focus attention to the integration with the SOAP endpoint.
+
+## 1. Migrate SOAP endpoint
 
 Still following a test-driven approach, include the checks below in your JUnit:
 
@@ -110,6 +112,8 @@ Again, not surprisingly, you should see your test unit fail with the following e
 
 The error above is telling you the mock (SOAP) server never got called by _Camel_. This is obvious, as the _Camel_ route invoking the SOAP backend is still missing (not migrated).
 
+## 2. Migrate the first route
+
 Let's migrate the necessary code from _Fuse_ so that the JUnit succeeds.
 
 There are 2 _Camel_ routes dedicated to integrate with the SOAP endpoint:
@@ -119,14 +123,14 @@ Contains the processing steps to interact with the SOAP server
 * `<route id="json2soap">` +
 Converts the JSON request into a SOAP request
 
-{empty} +
 
 
 Open in _Camel Quarkus_ the file containing the _Camel_ definitions, located at:
 
 - *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/main/resources/routes/api-medium.xml*
 
-Find in your template the following definition (empty):
+. Find in your template the following definition (empty):
++
 ----
     <route id="call-system2">
       <from uri="direct:call-system2"/>
@@ -134,9 +138,9 @@ Find in your template the following definition (empty):
       <log message="dummy call-system2 (to be removed)"/>
     </route>
 ----
-
++
 Replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
-
++
 [source,xml,role="copypaste"]
 ----
       <!-- TRANSFORM REQUEST JSON-to-SOAP -->
@@ -216,6 +220,8 @@ image::camel-callbackend2.png[align="center", width=30%]
 
 {empty} +
 
+## 3. Migrate the second route
+
 Let's migrate now the second route. +
 Find in your template the following definition (empty):
 ----
@@ -226,8 +232,8 @@ Find in your template the following definition (empty):
     </route>
 ----
 
-Replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
-
+. Replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
++
 [source,xml,role="copypaste"]
 ----
       <!-- SET ORIGINAL JSON REQUEST -->
@@ -287,6 +293,8 @@ In summary, the migrated _Camel_ route executes the following actions:
 
 {empty} +
 
+## 4. Update XSLT transformation
+
 One last migration step is to update the XSLT transformation to use native JSON handling with XPATH 3.0.
 
 NOTE: Although XSLT 3.0 was supported in _Fuse_, the old _Saxon_ dependency version required an enterprise licence. This is not a problem in _Red Hat build of Apache Camel_.
@@ -296,8 +304,10 @@ Open in _Camel Quarkus_ the following XSLT definition:
 
 - *migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template/src/main/resources/xslt/request.xsl*
 
-Replace the line `<!-- COPY/UPDATE mapping here -->` with the snippet below:
+Follow these instructions
 
+. Replace the line `<!-- COPY/UPDATE mapping here -->` with the snippet below:
++
 [source,xml,role="copypaste"]
 ----
 	<!-- Helper template to convert JSON into XML
@@ -368,6 +378,8 @@ This is because the new mapping works against the XML representation of the JSON
 	</xsl:template>
 ----
 ======
+
+## 5. SOAP endpoint reconfiguration
 
 Almost there. +
 Before executing one more time the Junit to validate the latest migration changes, let's add in the test unit the SOAP endpoint reconfiguration to point to the embedded mock SOAP.

@@ -1,6 +1,9 @@
 
-## Deployment overview
+# Deployment overview
+
 A legacy soap API has been deployed on the VM. The API returns a response as shown below
+
+[source,xml]
 ----
 <?xml version="1.0"?>
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">

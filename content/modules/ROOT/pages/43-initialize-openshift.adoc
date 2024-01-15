@@ -1,7 +1,8 @@
+# Red Hat Service Interconnect on OpenShift
 
-## Initialize Red Hat Service Interconnect in the Openshift cluster
+As mentioned earlier, we could either use the CLI or operator to initialize Red Hat Service Interconnect. To showcase both the options we'll be using the operator on OpenShift and the CLI on the VM build the connectivity.
 
-As mentioned earlier, we could either use the CLI or operator to initialize Red Hat Service Interconnect. To showcase both the options we'll be using the operator on OpenShift end and CLI on the VM build the connectivity.
+## 1. Deploying Red Hat Service Interconnect
 
 . From the devspaces UI navigate to the terminal on OpenShift where you logged into the OpenShift Cluster
 +
@@ -20,7 +21,6 @@ oc project {USER_ID}-project
 ----
 cd /projects/rh1-lab-eap-camel-quarkus
 ----
-
 
 . Create a config file with the name `mysite.yaml` by right-clicking on the top-level `rh1-lab-eap-camel-quarkus` folder and choosing "New File..." and name it `mysite.yaml`:
 +
@@ -41,7 +41,6 @@ data:
   console-password: "openshift"
   flow-collector: "true"
 ----
-
 
 . Initialize the Service Interconnect Router by issuing the below command in the OCP terminal. This should install the Service Interconnect resources in the namespace
 +

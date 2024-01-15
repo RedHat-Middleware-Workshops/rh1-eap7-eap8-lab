@@ -1,17 +1,19 @@
 
-== OpenShift Deployment
+= OpenShift Deployment
 
 Now that we have successfully migrated our Fuse application to Camel Quarkus, the final step of this lab is to deploy our Camel Quarkus application to OpenShift.  To do this we're going to use the terminal provided by OpenShift Dev Spaces.
 
 include::partial$open-terminal.adoc[]
 
-Run the following commands to trigger the deployment:
+## 1. Start the deployment
 
+. Run the following commands to trigger the deployment:
++
 [source,sh,role="copypaste",subs=attributes+]
 ----
 oc project {USER_ID}-project
 ----
-
++
 [source,sh,role="copypaste"]
 ----
 ./mvnw clean package -DskipTests -Dquarkus.kubernetes.deploy=true
@@ -33,8 +35,10 @@ Switch to the {openshift_cluster_console_url}[OpenShift console^]  and view the 
 
 image::complete-topology.png[complete topology]
 
-From your dev spaces terminal run the following command to test the Camel Quarkus app:
+## 2. Test the Camel Quarkus app
 
+. From your dev spaces terminal run the following command to test the Camel Quarkus app:
++
 [source,sh,role="copypaste",subs=attributes+]
 ----
 curl \

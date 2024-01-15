@@ -1,9 +1,11 @@
 
-== Response data mapping
+= Response data mapping
 
 The migration is one step away from completion. Both endpoints (REST and SOAP) are now fully integrated.
 
 The data obtained from the backends needs now to be merged in what we call data composition. We need to migrate the code that maps both data responses into a JSON structure the client expects, as per the API contract (OpenApi).
+
+## 1. Code migration
 
 There are 3 resources we need to work on to complete the migration:
 
@@ -38,6 +40,7 @@ Now follow the steps indicated below:
 <1> The assertions to validate the JSON response need to be included in this placeholder.
 ======
 
+[start=3]
 . Include the following code where it says `COPY/PASTE HERE JSON ...`:
 +
 [source,java,role="copypaste"]
@@ -138,6 +141,7 @@ The dummy response is injected in the route `mapResponse` by the following tempo
 <to uri="language:constant:resource:classpath:/data/dummy.json"/>
 ----
 
+## 2. Fixing the tests
 
 Let's finish the migration from _Fuse_ and make the JUnit succeed.
 
@@ -173,11 +177,11 @@ And follow the instructions below:
       <!-- REMOVE DUMMY RESPONSE -->
       <to uri="language:constant:resource:classpath:/data/dummy.json"/>
 ----
-
++
 IMPORTANT: Make sure you also replace the section: <to uri="language:constant:resource:classpath:/data/dummy.json"/>
 
 . And replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
-
++
 [source,xml,role="copypaste"]
 ----
       <!-- PREPARE XSLT INPUTS -->
@@ -248,7 +252,7 @@ In summary, the migrated _Camel_ route performs the following actions:
 . *Executes the data transformation*.
 
 
-{empty} + 
+## 3. Migrate data transformation
 
 And the last file to migrate is the `response.xsl` where the data transformation happens, merging JSON and SOAP data (from the endpoints) to provide a JSON response to send back to the calling system.
 
@@ -267,8 +271,8 @@ Find in the XSLT the following region of code:
 </xsl:template>
 ----
 
-Replace the line `<!-- COPY/PASTE HERE data mapping -->` with the snippet below:
-
+. Replace the line `<!-- COPY/PASTE HERE data mapping -->` with the snippet below:
++
 [source,xml,role="copypaste"]
 ----
     <!-- MAP XML INPUT TO XML FOR JSON 
