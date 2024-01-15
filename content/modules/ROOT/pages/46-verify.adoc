@@ -15,8 +15,8 @@ image::rhsi-ocp-terminal.png[rhsi-ocp-terminal]
 ----
 pwd
 ----
-
-. Output
++
+Output
 +
 [source,sh,role="copypaste",subs=attributes+]
 ----
