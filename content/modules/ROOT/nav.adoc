@@ -17,9 +17,9 @@
 * xref:04-rhsi-introduction.adoc[4. Red Hat Service Interconnect Lab]
 ** xref:41-setting-up-environment.adoc[4.1 Setting Up Your Development Environment]
 ** xref:42-deployment-overview.adoc[4.2 Deployment overview]
-** xref:43-initialize-openshift.adoc[4.3 Initialize Red Hat Service Interconnect in the Openshift cluster]
-** xref:44-initialize-vm.adoc[4.4 Initialize Red Hat Service Interconnect in the RHEL VM]
-** xref:45-create-link.adoc[4.5 Create a link between the namespace on OpenShift cluster and the VM]
+** xref:43-initialize-openshift.adoc[4.3 Red Hat Service Interconnect on Openshift]
+** xref:44-initialize-vm.adoc[4.4 Red Hat Service Interconnect on Virtual Machine]
+** xref:45-create-link.adoc[4.5 Linking RHSI on OpenShif and VM]
 ** xref:46-verify.adoc[4.6 Verify the Service Interconnect network]
 ** xref:47-summary.adoc[4.7 Summary]
 

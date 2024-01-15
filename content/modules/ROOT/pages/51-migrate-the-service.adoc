@@ -2,7 +2,7 @@
 
 [time=1]
 [id="migrate-service"]
-== Migrate the service
+= Migrate the service
 
 Both _Fuse_ and _Camel_ on _Quarkus_ are _Java_ projects based on _Maven_. Aside from packaging differences, their general structure is very similar and migrating files from one to the other is relatively easy.
 
@@ -22,9 +22,7 @@ The _Fuse_ project to migrate in this lab contains the common elements above des
 
 Nonetheless, the migration offers opportunities to improve/modernise coding practices and adopt new standards.
 
-{empty} +
-
-### Working on the Camel Quarkus project
+## 1. Working on the Camel Quarkus project
 
 You typically start a _Camel on Quarkus_ project by creating a project skeleton. The {quarkus-code-generator} is a great place where to start. You can use its search filter to automatically display all the _Apache Camel_ extensions available for _Quarkus_.
 
@@ -48,9 +46,7 @@ Inspect the list below for a summary of the files in the project you need to wor
 - *response.json* (Unit test sample)
 - *response.xml*  (Unit test sample)
 
-{empty} +
-
-### Migrate the Blueprint XML files
+## 2. Migrate the Blueprint XML files
 
 The best place in a _Fuse_ project from where to start migrating code is from the Blueprint definitions.
 
@@ -64,9 +60,7 @@ All the _Blueprint_ definitions are located in the _Fuse_ project under the fold
 
  - *migration-fuse-camel-quarkus/base/karaf/level2medium-soap/src/main/resources/OSGI-INF/blueprint/*
 
-{empty} +
-
-#### Configuration
+### Configuration
 
 When looking at the first code block from the `configuration.xml` blueprint file you'll find the configuration properties needed for _Karaf_ deployments:
 --
@@ -130,7 +124,7 @@ In _Quarkus_ you can easily define values for different environments by simply u
 
 {empty} +
 
-#### SOAP endpoint (CXF definition)
+### SOAP endpoint (CXF definition)
 
 The next relevant block from the `cxf.xml` blueprint file (in _Fuse_) is the CXF endpoint definition, as shown below:
 --
@@ -180,7 +174,7 @@ Your CXF (SOAP) endpoint is now defined in your migrated code.
 
 {empty} +
 
-#### API exposure (REST entrypoint)
+### API exposure (REST entrypoint)
 
 The next relevant block from the `camel.xml` blueprint file is the REST DSL code that defines the API operation to invoke the service, as shown below:
 --
@@ -262,7 +256,7 @@ Follow the steps below to configure the plugin:
 
 {empty} +
 
-#### Main Camel route
+### Main Camel route
 
 Let's migrate the main _Camel_ route that contains the end-to-end flow.
 
@@ -377,8 +371,6 @@ Run the following command:
 curl -H "content-type: application/json" -d '{"id":"123"}' http://localhost:8080/camel/subscriber/details | jq
 ----
 
-
-
 If successful, you should get a dummy JSON response similar to:
 
 [source,json]
@@ -422,7 +414,5 @@ The response you're obtaining is from a dummy sample payload _Camel_ loads from 
 <to uri="language:constant:resource:classpath:/data/dummy.json"/>
 ----
 --
-
-
 
 {empty} +

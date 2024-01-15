@@ -1,5 +1,5 @@
 
-== Test-driven migration 
+= Test-driven migration 
 
 The code migration done so far simply enables the new _Camel Quarkus_ application to perform a minimal request/response interaction using the _OpenApi_ contract. It is still however pending to include all the business logic from our old _Fuse_ project.
 
@@ -33,9 +33,6 @@ In the picture above observe the following elements:
 
 In the sections that follow you will adopt a test-driven approach using the Junit described to continue migrating the _Fuse_ project.
 
-{empty} +
-
-
 We intend in this section to migrate the region of code that integrates with the REST endpoint.
 
 As hinted in the previous section, the plan is to adopt a test-driven approach, and start by migrating a portion of the _Fuse_ Junit that will help ensuring it meets the functional expectations.
@@ -55,6 +52,7 @@ public class ServiceTest extends CamelBlueprintTestSupport {
 public class ServiceTest extends CamelQuarkusTestSupport {
 ----
 
+## 1. Migrate REST endpoint
 
 We've created a skeleton to accelerate the migration of the test unit. You only need to fill up the most relevant parts. You'll notice that the original code from _Fuse_, for the most part, is kept as-is with minor differences.
 
@@ -159,6 +157,7 @@ You can now focus your attention on the main test unit named `testServiceGetDeta
 
 You will complete its implementation in stages. First, let's validate the processing logic sending traffic to the first endpoint (REST backend). Later you will validate also the call to the SOAP endpoint.
 
+[start=3]
 . Find in your _Camel Quarkus_ project the region of code with the following declaration:
 +
 ----
@@ -305,13 +304,11 @@ However, the test allows you to validate the following bullet points:
 * The main route you have migrated is properly executing.
 * By failing, the junit is letting you know the functionality to invoke the REST endpoint is still not complete.
 
-{empty} +
 
 Let's work on the code and make the Junit succeed !
 
-{empty} +
 
-#### REST endpoint
+## 2. Fixing the tests
 
 Let's migrate the `call-system1` _Camel_ route that contains the integration logic with the REST endpoint.
 

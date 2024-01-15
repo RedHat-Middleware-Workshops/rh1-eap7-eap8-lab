@@ -1,6 +1,9 @@
 
-## Initialize Red Hat Service Interconnect in the RHEL VM
+# Red Hat Service Interconnect on Virtual Machine
+
 We'll be using the CLI to initialize Red Hat Service Interconnect on the VM.
+
+## 1. Deploying Red Hat Service Interconnect on VM
 
 . Go to the terminal on the devspaces where you are logged in to the VM.
 +
@@ -33,9 +36,6 @@ skupper switch
 ----
 skupper init --ingress none
 ----
-
-
-
 
 . Output
 +
