@@ -36,8 +36,8 @@ skupper switch
 ----
 skupper init --ingress none
 ----
-
-. Output
++
+Output
 +
 [source,sh,subs=attributes+]
 ----
@@ -50,8 +50,8 @@ Skupper is now installed for user 'lab-user'.  Use 'skupper status' to get more 
 ----
 skupper status
 ----
-
-. Output
++
+Output
 +
 [source,sh,subs=attributes+]
 ----
