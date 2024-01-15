@@ -11,8 +11,16 @@ Login with the following credentials:
 * *Username*: `{USER_ID}`
 * *Password*: `openshift`
 +
-. *Switch to the project called "{USER_ID}-project"*
+You should see the initial OpenShift developer UI screen.
++
+image::ocp-developer.png[ocp-developer]
 
+. Click on "Skip Tour"
++
+. *Switch to the project called "{USER_ID}-project"*
++
+image::select-project.png[select-project]
++
 . Within this project, add a PostgreSQL database by clicking on "+Add" and selecting "Database" from the Developer catalog.
 
 . From the Developer catalog, select the "PostgreSQL" template.

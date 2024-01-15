@@ -1,13 +1,16 @@
 
 = OpenShift Deployment
 
-Now that we have successfully migrated our Fuse application to Camel Quarkus, the final step of this lab is to deploy our Camel Quarkus application to OpenShift.  To do this we're going to use the terminal provided by OpenShift Dev Spaces.
-
-include::partial$open-terminal.adoc[]
+Now that we have successfully migrated our Fuse application to Camel Quarkus, the final step of this lab is to deploy our Camel Quarkus application to OpenShift.  
 
 ## 1. Start the deployment
 
-. Run the following commands to trigger the deployment:
+. Run the following commands from the Dev Spaces terminal
++
+[source,sh,role="copypaste",subs=attributes+]
+----
+cd /projects/rh1-lab-eap-camel-quarkus/migration-fuse-camel-quarkus/migration/camelq/level2medium-soap_template
+----
 +
 [source,sh,role="copypaste",subs=attributes+]
 ----
@@ -44,7 +47,7 @@ image::complete-topology.png[complete topology]
 curl \
 -H "content-type: application/json" \
 -d '{"id":"1"}' \
-http://medium.{USER_ID}-project.svc.cluster.local:8080/camel/subscriber/details
+http://medium.{USER_ID}-project.svc.cluster.local:8080/camel/subscriber/details | jq
 ----
 
 You should see a response similar to:
