@@ -49,7 +49,7 @@ data:
 oc apply -f mysite.yaml
 ----
 
-. Navigate to the https://skupper-{openshift_cluster_user_name}-project.{openshift_cluster_ingress_domain}/#/topology[Red Hat Service Interconnect console^] to verify that OCP cluster appears in the topology. Once the connectivity is established we should be able to see the VM in the topology view. Ignore any warnings and proceed by pressing the advanced link on your browser
+. Wait for a few seconds and navigate to the https://skupper-{openshift_cluster_user_name}-project.{openshift_cluster_ingress_domain}/#/topology[Red Hat Service Interconnect console^] to verify that OCP cluster appears in the topology. Once the connectivity is established we should be able to see the VM in the topology view. Ignore any warnings and proceed by pressing the advanced link on your browser
 
 . Login with the following credentials:
 +
