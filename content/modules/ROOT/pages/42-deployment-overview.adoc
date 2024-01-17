@@ -29,4 +29,4 @@ As shown in the image below after establishing the connectivity using Red Hat Se
 
 image::rhsi-overview.png[rhsi-overview]
 
-There are multiple ways to setup layer 7 connectivity using Red Hat Service interconnect. You use either use the CLI or the OpenShift Operator. In this section we'll be using the operator to setup connectivity on the OpenShift end and the CLI to setup the connectivity on the VM side.
+There are multiple ways to setup layer 7 connectivity using Red Hat Service interconnect. You can either use the CLI or the OpenShift Operator. In this section we'll be using the operator to setup connectivity on the OpenShift end and the CLI to setup the connectivity on the VM side.
