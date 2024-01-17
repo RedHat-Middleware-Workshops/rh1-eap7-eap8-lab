@@ -1,7 +1,7 @@
 
 # Deployment overview
 
-A legacy soap API has been deployed on the VM. The API returns a response as shown below
+A legacy soap API responsible for returning client details (e.g. address), has been deployed on the VM. The API returns a response as shown below
 
 [source,xml]
 ----
@@ -23,6 +23,10 @@ A legacy soap API has been deployed on the VM. The API returns a response as sho
 </soap:Envelope>
 ----
 
-The goal of our exercise it to make this Legacy SOAP API accessible from the OpenShift cluster, without exposing it to the public internet and not using any complex VPNs or firewalls. We will do this by establishing a Layer 7 connectivity between the legacy SOAP service running on a virtual machine and an OpenShift namespace using *Red Hat Service Interconnect*
+The SOAP service due to some internal dependencies cannot be moved on to the OpenShift cluster until a later phase, so we will use Red Hat Service Interconnect to establish a connection between our new application running on OpenShift and the SOAP service running on the existing on-prem Virtual Machine. The goal of our exercise it to make this Legacy SOAP API accessible from the OpenShift cluster, without exposing it to the public internet and not using any complex VPNs or firewalls. We will do this by establishing a Layer 7 connectivity between the legacy SOAP service running on a virtual machine and an OpenShift namespace using https://developers.redhat.com/products/service-interconnect/overview[Red Hat Service Interconnect.^]
+
+As shown in the image below after establishing the connectivity using Red Hat Service Interconnect, it creates a virtual local service on the OpenShift cluster for the SOAP API and redirects all the traffic to the SOAP API running on the Virtual Machine. The connection between the two Service Interconnect routers is mTLS encrypted
+
+image::rhsi-overview.png[rhsi-overview]
 
 There are multiple ways to setup layer 7 connectivity using Red Hat Service interconnect. You use either use the CLI or the OpenShift Operator. In this section we'll be using the operator to setup connectivity on the OpenShift end and the CLI to setup the connectivity on the VM side.

@@ -34,7 +34,7 @@ skupper switch
 +
 [source,sh,role="copypaste",subs=attributes+]
 ----
-skupper init --ingress none
+skupper init --ingress none --site-name vm
 ----
 +
 Output
