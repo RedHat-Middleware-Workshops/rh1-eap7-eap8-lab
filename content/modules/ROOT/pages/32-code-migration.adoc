@@ -241,6 +241,9 @@ to
             <layout>default</layout>
         </repository>
     </repositories>
+
+<!-- Paste pluginrepositories here -->
+
     <dependencyManagement>
 
         <dependencies>
@@ -305,9 +308,10 @@ to
         </plugins>
     </build>
     <profiles>
-<!-- TODO: Add OpenShift profile here -->
+<!-- Paste OpenShift profile here -->
     </profiles>
 </project>
+
 ----
 ======
 

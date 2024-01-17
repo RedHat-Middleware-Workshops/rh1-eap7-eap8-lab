@@ -19,7 +19,7 @@
 ** xref:42-deployment-overview.adoc[4.2 Deployment overview]
 ** xref:43-initialize-openshift.adoc[4.3 Red Hat Service Interconnect on Openshift]
 ** xref:44-initialize-vm.adoc[4.4 Red Hat Service Interconnect on Virtual Machine]
-** xref:45-create-link.adoc[4.5 Linking RHSI on OpenShif and VM]
+** xref:45-create-link.adoc[4.5 Linking RHSI on OpenShift and VM]
 ** xref:46-verify.adoc[4.6 Verify the Service Interconnect network]
 ** xref:47-summary.adoc[4.7 Summary]
 
