@@ -373,6 +373,8 @@ image::gitea-eap8-ocp.png[source-contol]
 
 . Enter a commit message in the message field and click on the "Commit" button.
 +
+IMPORTANT: Don't forget to enter a commit message and hit the commit button
++
 You will be prompted to stage files to the commit
 +
 image::git-2.png[stage-files]
