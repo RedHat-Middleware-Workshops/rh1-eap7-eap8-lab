@@ -170,19 +170,22 @@ to
 //TODO Remove when EAP 8.0 is GA
 IMPORTANT: Because EAP 8 is still Beta, we will need to configure the Red Hat maven repository to use the early access repository url. Once EAP 8.0 is GA this step will no longer be required
 
-. Change
+. Replace
 +
 [source,xml]
 ----
 <maven.redhat.repository.url>${maven.repository.protocol}://maven.repository.redhat.com/ga/</maven.redhat.repository.url>
 ----
 +
-to
+with
 +
 [source,xml,role="copypaste"]
 ----
 <maven.redhat.repository.url>${maven.repository.protocol}://maven.repository.redhat.com/earlyaccess/all/</maven.redhat.repository.url>
-----      
+----     
+
+NOTE: Once this change is made there should be only one reference to maven.redhat.repository.url in the pom.xml file.
+
 +
 .Click here for reveal the modified pom.xml file
 [%collapsible]

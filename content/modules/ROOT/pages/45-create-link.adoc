@@ -72,7 +72,7 @@ image::rhs-ocp-vm-topology.png[rhs-ocp-vm-topology]
 +
 This confirms that the link has now been established
 +
-[NOTE]
+[IMPORTANT]
 ====
 The circles depicting the environments might overlap each other sometimes and hence might not be visible. If that's the case, click on the circle that's visible and drag it to the side ensure proper visibility.
 ====
