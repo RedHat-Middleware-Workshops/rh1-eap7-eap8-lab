@@ -1,6 +1,6 @@
 = OpenShift Environment
 
-The JBoss EAP application requires a connection to a PostgreSQL database.  Before we deploy our application on OpenShift we will need to deloy an instance of PostgreSQL.
+The JBoss EAP application requires a connection to a PostgreSQL database.  Before we deploy our application on OpenShift we will need to deploy an instance of PostgreSQL.
 
 == 1. PostgreSQL database setup
 
