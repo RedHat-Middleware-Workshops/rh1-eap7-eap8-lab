@@ -134,12 +134,12 @@ Open in _Camel Quarkus_ the file containing the _Camel_ definitions, located at:
 ----
     <route id="call-system2">
       <from uri="direct:call-system2"/>
-      <!-- COPY/PASTE DEFINITION HERE -->
+      <!-- COPY/PASTE SYSTEM2 DEFINITION HERE -->
       <log message="dummy call-system2 (to be removed)"/>
     </route>
 ----
 +
-Replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
+Replace the line `<!-- COPY/PASTE SYSTEM2 DEFINITION HERE -->` with the snippet below:
 +
 [source,xml,role="copypaste"]
 ----
@@ -227,12 +227,12 @@ Find in your template the following definition (empty):
 ----
     <route id="json2soap">
       <from uri="direct:json2soap"/>
-      <!-- COPY/PASTE DEFINITION HERE -->
+      <!-- COPY/PASTE SOAP DEFINITION HERE -->
       <log message="dummy"/>
     </route>
 ----
 
-. Replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
+. Replace the line `<!-- COPY/PASTE SOAP DEFINITION HERE -->` with the snippet below:
 +
 [source,xml,role="copypaste"]
 ----

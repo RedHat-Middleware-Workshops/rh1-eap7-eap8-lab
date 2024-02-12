@@ -269,11 +269,11 @@ NOTE: The file is a skeleton with empty route definitions and dummy values. You 
 Find and replace your current definition (empty) in your Camel Project:
 ----
     <route id="main">
-      <!-- COPY/PASTE DEFINITION HERE -->
+      <!-- COPY/PASTE ROUTE DEFINITION HERE -->
     </route>
 ----
 
-Replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below (based on the orginal _Blueprint_ definition):
+Replace the line `<!-- COPY/PASTE ROUTE DEFINITION HERE -->` with the snippet below (based on the orginal _Blueprint_ definition):
 
 [source,xml,role="copypaste"]
 ----
