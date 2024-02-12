@@ -162,7 +162,7 @@ Find in your template the following (empty) definition:
     <route id="mapResponse">
       <from uri="direct:mapResponse"/>
 
-      <!-- COPY/PASTE DEFINITION HERE -->
+      <!-- COPY/PASTE RESPONSE DEFINITION HERE -->
 
       <!-- REMOVE DUMMY RESPONSE -->
       <to uri="language:constant:resource:classpath:/data/dummy.json"/>
@@ -178,7 +178,7 @@ And follow the instructions below:
       <to uri="language:constant:resource:classpath:/data/dummy.json"/>
 ----
 
-. And replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
+. And replace the line `<!-- COPY/PASTE RESPONSE DEFINITION HERE -->` with the snippet below:
 +
 [source,xml,role="copypaste"]
 ----

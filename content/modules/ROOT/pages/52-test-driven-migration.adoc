@@ -322,12 +322,12 @@ Find in your template the following definition (empty):
 ----
     <route id="call-system1">
       <from uri="direct:call-system1"/>
-      <!-- COPY/PASTE DEFINITION HERE -->
+      <!-- COPY/PASTE SYSTEM1 DEFINITION HERE -->
       <log message="dummy call-system1 (to be removed)"/>
     </route>
 ----
 
-Replace the line `<!-- COPY/PASTE DEFINITION HERE -->` with the snippet below:
+Replace the line `<!-- COPY/PASTE SYSTEM1 DEFINITION HERE -->` with the snippet below:
 
 [source,xml,role="copypaste"]
 ----
